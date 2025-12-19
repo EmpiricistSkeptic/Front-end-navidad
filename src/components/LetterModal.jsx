@@ -1,25 +1,58 @@
-function LetterModal({ isOpen, text, onClose }) {
+import React, { useEffect } from 'react';
+
+const MagicLetterModal = ({
+  isOpen,
+  onClose,
+  title = 'Carta para ti',
+  subtitle = 'Estrella nocturna',
+  text = '',
+}) => {
+  // Блокируем скролл страницы, пока письмо открыто
+  useEffect(() => {
+    if (isOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-card letter-card">
-        <h2 className="letter-title">Письмо звезды</h2>
-        <div className="letter-body">
-          {text.split('\n').map((line, index) =>
-            line.trim() === '' ? (
-              <br key={index} />
-            ) : (
-              <p key={index}>{line}</p>
-            )
-          )}
+    <div className="letter-overlay" onClick={onClose}>
+      <div className="letter-container">
+        {/* Карточка письма */}
+        <div className="letter-paper" onClick={(e) => e.stopPropagation()}>
+          <div className="letter-content">
+            <div className="letter-star-icon" aria-hidden="true">
+              ⭐
+            </div>
+
+            <header className="letter-header">
+              <h1 className="letter-title">{title}</h1>
+              {subtitle && <div className="letter-subtitle">{subtitle}</div>}
+            </header>
+
+            <div className="letter-body-scroll">
+              <div className="letter-text">{text}</div>
+            </div>
+
+            <footer className="letter-footer">
+              <span className="letter-decoration">~ ✦ ~</span>
+              <button type="button" className="close-btn" onClick={onClose}>
+                Volver a las estrellas
+              </button>
+            </footer>
+          </div>
         </div>
-        <button className="letter-close-button" onClick={onClose}>
-          Вернуться к звёздам
-        </button>
       </div>
     </div>
   );
-}
+};
 
-export default LetterModal;
+export default MagicLetterModal;
+
+
+

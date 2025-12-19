@@ -1,34 +1,47 @@
+import React from 'react';
+import starImg from '../assets/star-glow.png'; // <-- ПОДСТАВЬ СВОЙ ФАЙЛ
+
 function StarMap({ days, todayDayIndex, onDayClick }) {
   return (
     <div className="star-map">
-      {/* Можно потом соединять звезды линиями (SVG), сейчас просто оставим фон */}
-
       {days.map((day) => {
         const isToday = day.dayIndex === todayDayIndex;
         const isUnlocked = day.unlocked;
         const isNew = isUnlocked && !day.letterOpened;
+        const isRead = isUnlocked && day.letterOpened;
 
-        const classNames = [
-          'star',
-          isUnlocked ? 'star--unlocked' : 'star--locked',
-          isToday ? 'star--today' : '',
-          isNew ? 'star--new' : '',
-        ]
-          .filter(Boolean)
-          .join(' ');
+        const classNames = ['star'];
+
+        if (!isUnlocked) {
+          classNames.push('star--locked');
+        } else {
+          classNames.push('star--available');
+          if (isNew) classNames.push('star--new');
+          if (isRead) classNames.push('star--read');
+          if (isToday) classNames.push('star--today');
+        }
 
         return (
           <button
             key={day.dayIndex}
-            className={classNames}
+            className={classNames.join(' ')}
             style={{
               left: `${day.x}%`,
               top: `${day.y}%`,
             }}
             disabled={!isUnlocked}
-            onClick={() => onDayClick(day.dayIndex)}
+            onClick={() => {
+              if (!isUnlocked) return;
+              onDayClick(day.dayIndex);
+            }}
+            aria-label={`Звезда дня ${day.dayIndex}`}
           >
-            {day.dayIndex}
+            <img
+              src={starImg}
+              alt=""
+              className="star-img"
+              draggable="false"
+            />
           </button>
         );
       })}

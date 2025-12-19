@@ -1,75 +1,116 @@
-import { useState } from 'react';
+// src/components/HomePage.jsx
+import { useEffect, useState } from 'react';
 import StarMap from './StarMap.jsx';
 import CatSceneModal from './CatSceneModal.jsx';
 import LetterModal from './LetterModal.jsx';
-import { mockDialogue, mockLetterText } from '../mockData.js';
+import storyService from '../services/story.service';
+import letterService from '../services/letter.service';
+import winterScene from '../assets/winter-scene-2048.png';
+
+const TOTAL_DAYS = 9; // количество дней истории
 
 function HomePage({ user, onLogout }) {
-  const todayDayIndex = 1;
-
+  const [todayDayIndex, setTodayDayIndex] = useState(null);
+  const [days, setDays] = useState([]);
   const [sceneCompleted, setSceneCompleted] = useState(false);
   const [showLetterModal, setShowLetterModal] = useState(false);
+  const [todayLetter, setTodayLetter] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Здесь уже несколько дней с координатами на небе
-  const [days, setDays] = useState([
-    {
-      dayIndex: 1,
-      unlocked: true,
-      letterOpened: false,
-      x: 20,
-      y: 30,
-    },
-    {
-      dayIndex: 2,
-      unlocked: false,
-      letterOpened: false,
-      x: 55,
-      y: 40,
-    },
-    {
-      dayIndex: 3,
-      unlocked: false,
-      letterOpened: false,
-      x: 70,
-      y: 65,
-    },
-    {
-      dayIndex: 4,
-      unlocked: false,
-      letterOpened: false,
-      x: 35,
-      y: 70,
-    },
-  ]);
+  // Инициализация истории и прогресса пользователя
+  useEffect(() => {
+    const init = async () => {
+      setLoading(true);
+      try {
+        const initData = await storyService.initStory();
 
-  const handleSceneCompleted = () => {
+        setTodayDayIndex(initData.today_day_index);
+
+        // Формируем массив дней с координатами для звёзд
+        const coords = [
+          { x: 30, y: 70 }, { x: 42, y: 58 }, { x: 58, y: 48 },
+          { x: 70, y: 35 }, { x: 55, y: 25 }, { x: 38, y: 32 },
+          { x: 24, y: 45 }, { x: 68, y: 62 }, { x: 80, y: 50 },
+        ];
+
+        const daysArray = [];
+        for (let i = 1; i <= TOTAL_DAYS; i++) {
+          const progress = initData.progress.find(p => p.day_index === i);
+          daysArray.push({
+            dayIndex: i,
+            unlocked: progress?.scene_completed || false,
+            letterOpened: progress?.letter_opened || false,
+            x: coords[i - 1].x,
+            y: coords[i - 1].y,
+          });
+        }
+        setDays(daysArray);
+
+        // Если сцена сегодня ещё не пройдена — показываем CatSceneModal
+        const todayProgress = initData.progress.find(p => p.day_index === initData.today_day_index);
+        if (!todayProgress?.scene_completed) {
+          setSceneCompleted(false);
+        } else {
+          setSceneCompleted(true);
+        }
+
+        // Если письмо сегодня ещё не открыто — подготавливаем письмо
+        const todayLetterData = initData.letters.find(l => l.day_index === initData.today_day_index);
+        if (todayLetterData && !todayProgress?.letter_opened) {
+          setTodayLetter(todayLetterData);
+        }
+
+      } catch (err) {
+        setError(err.message || 'Error cargando la historia');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    init();
+  }, []);
+
+  const handleSceneCompleted = async () => {
     setSceneCompleted(true);
 
-    // Разблокируем сегодняшнюю звезду (на будущее – можно разблокировать следующую)
-    setDays((prev) =>
-      prev.map((day) =>
+    // Обновляем прогресс на фронте
+    setDays(prev =>
+      prev.map(day =>
         day.dayIndex === todayDayIndex
           ? { ...day, unlocked: true }
           : day
       )
     );
 
-    setShowLetterModal(true);
+    try {
+      // Получаем письмо сегодняшнего дня через letterService
+      const letter = await letterService.getLetter(todayDayIndex);
+      setTodayLetter(letter);
+      setShowLetterModal(true);
+    } catch (err) {
+      console.error('No se pudo cargar la carta:', err);
+    }
   };
 
-  const handleOpenDay = (dayIndex) => {
-    const day = days.find((d) => d.dayIndex === dayIndex);
+  const handleOpenDay = async (dayIndex) => {
+    const day = days.find(d => d.dayIndex === dayIndex);
     if (!day || !day.unlocked) return;
 
-    // Пока — просто открываем письмо.
-    // Позже можно: если сцена не пройдена — показывать сцену, иначе письмо.
-    setShowLetterModal(true);
+    try {
+      const letter = await letterService.getLetter(dayIndex);
+      setTodayLetter(letter);
+      setShowLetterModal(true);
+    } catch (err) {
+      console.error('No se pudo abrir la carta:', err);
+    }
   };
 
   const handleLetterClose = () => {
     setShowLetterModal(false);
-    setDays((prev) =>
-      prev.map((day) =>
+    // Отмечаем письмо сегодняшнего дня как открытое
+    setDays(prev =>
+      prev.map(day =>
         day.dayIndex === todayDayIndex
           ? { ...day, letterOpened: true }
           : day
@@ -77,69 +118,76 @@ function HomePage({ user, onLogout }) {
     );
   };
 
+  if (loading || todayDayIndex === null) {
+    return (
+      <div className="home-wrapper" style={{ backgroundImage: `url(${winterScene})` }}>
+        <p className="loading-text">Cargando historia...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="home-wrapper" style={{ backgroundImage: `url(${winterScene})` }}>
+        <p className="error-text">{error}</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="home-wrapper">
-      {/* Шапка */}
-      <header className="home-header">
-        <div>
-          <div className="home-greeting">
-            Привет, {user.name || 'Путешественник'} ✨
-          </div>
-          <div className="home-subtitle">
-            Сегодняшний день истории:&nbsp;
-            <strong>{todayDayIndex}</strong>
-          </div>
+    <div className="home-wrapper" style={{ backgroundImage: `url(${winterScene})` }}>
+      {/* Кнопка выхода */}
+      <button className="home-logout" onClick={onLogout}>
+        Cerrar sesión
+      </button>
+
+      {/* Слой с созвездием */}
+      <div className="home-sky-layer">
+        <StarMap
+          days={days}
+          todayDayIndex={todayDayIndex}
+          onDayClick={handleOpenDay}
+        />
+      </div>
+
+      {/* Приветствие */}
+      <header className="home-header-card">
+        <div className="home-greeting">
+          ¡Hola, {user.username || 'viajera'}! ✨
         </div>
-        <button className="home-logout" onClick={onLogout}>
-          Выйти
-        </button>
+        <div className="home-subtitle">
+          Día de la historia: <strong>{todayDayIndex}</strong>
+        </div>
       </header>
 
-      {/* Основной контент */}
-      <main className="home-main">
-        <section className="home-sky">
-          <div className="home-sky-header">
-            <div className="home-sky-title">Твоё зимнее небо</div>
-            <div className="home-sky-subtitle">
-              Каждая звезда — письмо, которое откроется в свой день.
-            </div>
-          </div>
+      {/* Инструкция */}
+      <section className="home-info-card">
+        <h2 className="home-info-title">Cómo funciona tu cuento</h2>
+        <p>
+          Aquí siempre estará tu invierno personal: la casita, el gato y el cielo estrellado.
+          Cada día, una nueva estrella se enciende arriba y dentro hay
+          una carta o poema solo para ti.
+        </p>
+        <p>
+          Solo entra, habla con el gato y observa cómo tu noche
+          se llena poco a poco de luces brillantes.
+        </p>
+      </section>
 
-          <StarMap
-            days={days}
-            todayDayIndex={todayDayIndex}
-            onDayClick={handleOpenDay}
-          />
-        </section>
-
-        <section className="home-info">
-          <h2 className="home-info-title">Как это работает</h2>
-          <p>
-            В этом окне всегда будет твоя личная ночь: кот, снежинки и звёзды.
-            Каждый день здесь загорается одна звезда, и внутри неё — письмо
-            или стих, который был написан только для тебя.
-          </p>
-          <p>
-            Просто заходи в сказку, разговаривай с котом и смотри, какие
-            новые огоньки появляются на твоём небе.
-          </p>
-        </section>
-      </main>
-
-      {/* Сцена с котом – пока автопоказ, если не завершена */}
+      {/* Сцена с котом */}
       {!sceneCompleted && (
         <CatSceneModal
           isOpen={!sceneCompleted}
-          dialogue={mockDialogue}
           onSceneCompleted={handleSceneCompleted}
         />
       )}
 
-      {/* Письмо/стих */}
-      {showLetterModal && (
-        <LetterModal
+      {/* Модалка письма */}
+      {showLetterModal && todayLetter && (
+        <MagicLetterModal
           isOpen={showLetterModal}
-          text={mockLetterText}
+          title={todayLetter.title || 'Письмо для тебя'}
+          text={todayLetter.text}
           onClose={handleLetterClose}
         />
       )}

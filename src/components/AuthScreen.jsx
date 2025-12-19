@@ -1,73 +1,113 @@
 import { useState } from 'react';
+import authService from '../services/auth.service';
 
 function AuthScreen({ onAuth }) {
   const [name, setName] = useState('');
   const [secret, setSecret] = useState('');
-  const [mode, setMode] = useState('register'); // 'register' | 'login'
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name.trim() || !secret.trim()) return;
 
-    // Здесь в будущем будет вызов реального /api/register/ или /api/login/
-    onAuth({ name: name.trim() });
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await authService.login(
+        name.trim(),
+        secret.trim()
+      );
+
+      onAuth({
+        userId: response.user_id,
+        username: response.username,
+      });
+    } catch (err) {
+      setError(err.message || 'La puerta no se abrió');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="auth-wrapper">
-      <div className="auth-card">
-        <h1 className="auth-title">
-          {mode === 'register' ? 'Вход в сказку' : 'Вернуться в сказку'}
-        </h1>
+      {/* capa de polvo estelar */}
+      <div className="auth-stars-layer" aria-hidden="true" />
 
-        <p className="auth-subtitle">
-          {mode === 'register'
-            ? 'Введи своё имя и придумай секретный код — страж сказки пропустит только тебя.'
-            : 'Введи имя и секретный код, чтобы вернуться к своему небу и коту.'}
-        </p>
+      <div className="auth-scene">
+        <header className="auth-header">
+          <h1 className="auth-title">
+            La puerta secreta
+          </h1>
+          <p className="auth-subtitle">
+            Di tu nombre y la palabra secreta.
+            Solo para ti, la puerta se abrirá.
+          </p>
+        </header>
 
-        <form onSubmit={handleSubmit} className="auth-form">
-          <label className="auth-label">
-            Имя
-            <input
-              className="auth-input"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Например, Алиса"
-            />
-          </label>
+        <div className="auth-door-layout">
+          <div className="auth-door-glow" aria-hidden="true" />
 
-          <label className="auth-label">
-            Секретный код
-            <input
-              className="auth-input"
-              type="password"
-              value={secret}
-              onChange={(e) => setSecret(e.target.value)}
-              placeholder="Только ты и звёзды будете его знать"
-            />
-          </label>
+          <div className="auth-door-frame">
+            <form onSubmit={handleSubmit} className="auth-door-form">
+              <div className="auth-door-form-inner">
+                <label className="auth-label">
+                  Tu nombre
+                  <input
+                    className="auth-input"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    disabled={loading}
+                    placeholder="¿Quién llama a la puerta?"
+                  />
+                </label>
 
-          <button type="submit" className="auth-button">
-            {mode === 'register' ? 'Войти в сказку' : 'Войти'}
-          </button>
-        </form>
+                <label className="auth-label">
+                  Palabra secreta
+                  <input
+                    className="auth-input"
+                    type="password"
+                    value={secret}
+                    onChange={(e) => setSecret(e.target.value)}
+                    disabled={loading}
+                    placeholder="Solo tú y las estrellas lo saben"
+                  />
+                </label>
 
-        <button
-          type="button"
-          className="auth-switch"
-          onClick={() =>
-            setMode((prev) => (prev === 'register' ? 'login' : 'register'))
-          }
-        >
-          {mode === 'register'
-            ? 'У меня уже есть код'
-            : 'Я здесь впервые'}
-        </button>
+                {error && (
+                  <p className="auth-error">
+                    {error}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  className="auth-button"
+                  disabled={loading}
+                >
+                  {loading
+                    ? 'La puerta escucha...'
+                    : 'Abrir la puerta'}
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div className="auth-door-side-text">
+            <p>
+              El gato susurra:
+              <span> «Solo a ti te dejaré entrar.»</span>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
 export default AuthScreen;
+
+
