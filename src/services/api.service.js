@@ -1,5 +1,5 @@
 // src/services/api.service.js
-const BASE_URL = 'http://52.91.185.120:8001/api';
+const BASE_URL = 'https://webshots-issue-pci-cyber.trycloudflare.com/api';
 
 const getAccessToken = () => {
   return localStorage.getItem('access_token');
