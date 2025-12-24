@@ -1,5 +1,5 @@
 // src/services/api.service.js
-const BASE_URL = 'https://webshots-issue-pci-cyber.trycloudflare.com/api';
+const BASE_URL = 'https://52.91.185.120.sslip.io/api';
 
 const getAccessToken = () => {
   return localStorage.getItem('access_token');
