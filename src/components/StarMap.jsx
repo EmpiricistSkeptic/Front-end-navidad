@@ -1,5 +1,5 @@
 import React from 'react';
-import starImg from '../assets/star-glow.png'; // <-- ПОДСТАВЬ СВОЙ ФАЙЛ
+import starImg from '../assets/starglow1.png'; // <-- ПОДСТАВЬ СВОЙ ФАЙЛ
 
 function StarMap({ days, todayDayIndex, onDayClick }) {
   return (

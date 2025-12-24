@@ -1,33 +1,39 @@
-// src/components/HomePage.jsx
 import { useEffect, useState } from 'react';
 import StarMap from './StarMap.jsx';
 import CatSceneModal from './CatSceneModal.jsx';
 import LetterModal from './LetterModal.jsx';
+import ProposalModal from './ProposalModal.jsx'; 
+import Celebration from './Celebration.jsx';
+
 import storyService from '../services/story.service';
 import letterService from '../services/letter.service';
 import winterScene from '../assets/winter-scene-2048.png';
+import usPhoto from '../assets/us.png'; 
 
-const TOTAL_DAYS = 9; // количество дней истории
+const TOTAL_DAYS = 9; 
 
-function HomePage({ user, onLogout }) {
+// Добавили проп onOpenGallery
+function HomePage({ user, onLogout, onOpenGallery }) {
   const [todayDayIndex, setTodayDayIndex] = useState(null);
   const [days, setDays] = useState([]);
   const [sceneCompleted, setSceneCompleted] = useState(false);
+  
   const [showLetterModal, setShowLetterModal] = useState(false);
-  const [todayLetter, setTodayLetter] = useState(null);
+  const [currentLetter, setCurrentLetter] = useState(null);
+  
+  const [showProposal, setShowProposal] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Инициализация истории и прогресса пользователя
   useEffect(() => {
     const init = async () => {
       setLoading(true);
       try {
         const initData = await storyService.initStory();
-
         setTodayDayIndex(initData.today_day_index);
 
-        // Формируем массив дней с координатами для звёзд
         const coords = [
           { x: 30, y: 70 }, { x: 42, y: 58 }, { x: 58, y: 48 },
           { x: 70, y: 35 }, { x: 55, y: 25 }, { x: 38, y: 32 },
@@ -35,34 +41,29 @@ function HomePage({ user, onLogout }) {
         ];
 
         const daysArray = [];
-        for (let i = 1; i <= TOTAL_DAYS; i++) {
+        for (let i = 0; i < TOTAL_DAYS; i++) {
           const progress = initData.progress.find(p => p.day_index === i);
           daysArray.push({
             dayIndex: i,
-            unlocked: progress?.scene_completed || false,
+            unlocked: progress?.scene_completed || false, 
             letterOpened: progress?.letter_opened || false,
-            x: coords[i - 1].x,
-            y: coords[i - 1].y,
+            x: coords[i]?.x || 50,
+            y: coords[i]?.y || 50,
           });
         }
         setDays(daysArray);
 
-        // Если сцена сегодня ещё не пройдена — показываем CatSceneModal
         const todayProgress = initData.progress.find(p => p.day_index === initData.today_day_index);
-        if (!todayProgress?.scene_completed) {
-          setSceneCompleted(false);
+        
+        if (todayProgress && todayProgress.scene_completed) {
+            setSceneCompleted(true);
         } else {
-          setSceneCompleted(true);
-        }
-
-        // Если письмо сегодня ещё не открыто — подготавливаем письмо
-        const todayLetterData = initData.letters.find(l => l.day_index === initData.today_day_index);
-        if (todayLetterData && !todayProgress?.letter_opened) {
-          setTodayLetter(todayLetterData);
+            setSceneCompleted(false);
         }
 
       } catch (err) {
-        setError(err.message || 'Error cargando la historia');
+        console.error(err);
+        setError('No se pudo cargar la historia estelar.');
       } finally {
         setLoading(false);
       }
@@ -71,25 +72,24 @@ function HomePage({ user, onLogout }) {
     init();
   }, []);
 
-  const handleSceneCompleted = async () => {
+  const handleSceneCompleted = async (finishedDayIndex) => {
     setSceneCompleted(true);
+    const dayToFetch = (finishedDayIndex !== null && finishedDayIndex !== undefined) 
+                        ? finishedDayIndex 
+                        : todayDayIndex;
 
-    // Обновляем прогресс на фронте
-    setDays(prev =>
-      prev.map(day =>
-        day.dayIndex === todayDayIndex
-          ? { ...day, unlocked: true }
-          : day
-      )
-    );
+    setDays(prev => prev.map(day => 
+      day.dayIndex === dayToFetch 
+        ? { ...day, unlocked: true } 
+        : day
+    ));
 
     try {
-      // Получаем письмо сегодняшнего дня через letterService
-      const letter = await letterService.getLetter(todayDayIndex);
-      setTodayLetter(letter);
+      const letter = await letterService.getLetter(dayToFetch);
+      setCurrentLetter(letter);
       setShowLetterModal(true);
     } catch (err) {
-      console.error('No se pudo cargar la carta:', err);
+      console.error('Error cargando la carta tras la escena:', err);
     }
   };
 
@@ -99,29 +99,45 @@ function HomePage({ user, onLogout }) {
 
     try {
       const letter = await letterService.getLetter(dayIndex);
-      setTodayLetter(letter);
+      setCurrentLetter(letter);
       setShowLetterModal(true);
     } catch (err) {
-      console.error('No se pudo abrir la carta:', err);
+      console.error('Error abriendo carta antigua:', err);
     }
   };
 
   const handleLetterClose = () => {
+    const closedLetterDayIndex = currentLetter?.day_index;
     setShowLetterModal(false);
-    // Отмечаем письмо сегодняшнего дня как открытое
-    setDays(prev =>
-      prev.map(day =>
-        day.dayIndex === todayDayIndex
-          ? { ...day, letterOpened: true }
-          : day
-      )
-    );
+    setCurrentLetter(null);
+    
+    if (closedLetterDayIndex !== undefined) {
+        setDays(prev => prev.map(day => 
+            (day.dayIndex === closedLetterDayIndex)
+            ? { ...day, letterOpened: true }
+            : day
+        ));
+    }
+
+    if (closedLetterDayIndex === 3) {
+      setTimeout(() => {
+        setShowProposal(true);
+      }, 800);
+    }
   };
 
-  if (loading || todayDayIndex === null) {
+  const handleAcceptProposal = () => {
+    setShowProposal(false);
+    setShowCelebration(true);
+    setTimeout(() => {
+      setShowCelebration(false);
+    }, 8000);
+  };
+
+  if (loading) {
     return (
       <div className="home-wrapper" style={{ backgroundImage: `url(${winterScene})` }}>
-        <p className="loading-text">Cargando historia...</p>
+        <div className="loading-container">✨ Cargando estrellas...</div>
       </div>
     );
   }
@@ -129,68 +145,85 @@ function HomePage({ user, onLogout }) {
   if (error) {
     return (
       <div className="home-wrapper" style={{ backgroundImage: `url(${winterScene})` }}>
-        <p className="error-text">{error}</p>
+        <div className="error-container">{error}</div>
       </div>
     );
   }
 
   return (
     <div className="home-wrapper" style={{ backgroundImage: `url(${winterScene})` }}>
-      {/* Кнопка выхода */}
-      <button className="home-logout" onClick={onLogout}>
-        Cerrar sesión
+      
+      {/* Кнопка ВЫХОДА */}
+      <button 
+        className="home-logout" 
+        onClick={onLogout}
+        style={{ top: '20px', bottom: 'auto', left: 'auto', right: '20px' }}
+      >
+        Salir
       </button>
 
-      {/* Слой с созвездием */}
-      <div className="home-sky-layer">
-        <StarMap
-          days={days}
-          todayDayIndex={todayDayIndex}
-          onDayClick={handleOpenDay}
-        />
-      </div>
+      {/* НОВАЯ КНОПКА: Альбом (слева сверху) */}
+      <button 
+        className="album-btn-home" 
+        onClick={onOpenGallery}
+      >
+         Nuestro Álbum
+      </button>
 
-      {/* Приветствие */}
-      <header className="home-header-card">
-        <div className="home-greeting">
-          ¡Hola, {user.username || 'viajera'}! ✨
+      {/* Основной контент страницы */}
+      <>
+        <div className="home-sky-layer">
+          <StarMap
+            days={days}
+            todayDayIndex={todayDayIndex}
+            onDayClick={handleOpenDay}
+          />
         </div>
-        <div className="home-subtitle">
-          Día de la historia: <strong>{todayDayIndex}</strong>
+
+        <header className="home-header-card">
+          <div className="home-greeting">
+            ¡Hola, {user.username || 'princesa'}!
+          </div>
+          <div className="home-subtitle">
+            Día de la historia: <strong>{todayDayIndex}</strong>
+          </div>
+        </header>
+
+        <div className="fairytale-hint">
+          <div className="hint-icon">🕯️</div>
+          <div className="hint-content">
+            <h4>Tu Cuento de Invierno</h4>
+            <p>
+              Vuelve aquí cada noche y habla con el <strong>Gato Guardián</strong>. 
+              Al terminar su historia, se encenderá una estrella... ✨
+            </p>
+          </div>
         </div>
-      </header>
 
-      {/* Инструкция */}
-      <section className="home-info-card">
-        <h2 className="home-info-title">Cómo funciona tu cuento</h2>
-        <p>
-          Aquí siempre estará tu invierno personal: la casita, el gato y el cielo estrellado.
-          Cada día, una nueva estrella se enciende arriba y dentro hay
-          una carta o poema solo para ti.
-        </p>
-        <p>
-          Solo entra, habla con el gato y observa cómo tu noche
-          se llena poco a poco de luces brillantes.
-        </p>
-      </section>
+        {!sceneCompleted && (
+          <CatSceneModal
+            isOpen={!sceneCompleted}
+            onSceneCompleted={handleSceneCompleted}
+          />
+        )}
 
-      {/* Сцена с котом */}
-      {!sceneCompleted && (
-        <CatSceneModal
-          isOpen={!sceneCompleted}
-          onSceneCompleted={handleSceneCompleted}
+        {showLetterModal && currentLetter && (
+          <LetterModal
+            isOpen={showLetterModal}
+            onClose={handleLetterClose}
+            title={currentLetter.title || `Estrella ${currentLetter.day_index}`}
+            text={currentLetter.text}
+          />
+        )}
+
+        <ProposalModal 
+          isOpen={showProposal}
+          onAccept={handleAcceptProposal}
+          photoSrc={usPhoto}
         />
-      )}
 
-      {/* Модалка письма */}
-      {showLetterModal && todayLetter && (
-        <MagicLetterModal
-          isOpen={showLetterModal}
-          title={todayLetter.title || 'Письмо для тебя'}
-          text={todayLetter.text}
-          onClose={handleLetterClose}
-        />
-      )}
+        <Celebration isActive={showCelebration} />
+      </>
     </div>
   );
 }
