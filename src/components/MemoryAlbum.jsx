@@ -36,7 +36,7 @@ import photo_her_art_4 from '../assets/figura3.jpg';
 import photo_her_art_5 from '../assets/figura4.jpg';
 import photo_her_art_6 from '../assets/figura5.jpg';
 import photo_her_art_7 from '../assets/figura6.jpg';
-import photo_her_art_8 from '../assets/figura7.jpg';
+import photo_her_art_8 from '../assets/Figura7.jpg';
 import photo_her_art_9 from '../assets/figura8.jpg';
 import photo_her_art_10 from '../assets/figura9.jpg';
 import photo_her_art_11 from '../assets/figura10.jpg';
