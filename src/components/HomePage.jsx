@@ -2,13 +2,10 @@ import { useEffect, useState } from 'react';
 import StarMap from './StarMap.jsx';
 import CatSceneModal from './CatSceneModal.jsx';
 import LetterModal from './LetterModal.jsx';
-import ProposalModal from './ProposalModal.jsx'; 
-import Celebration from './Celebration.jsx';
 
 import storyService from '../services/story.service';
 import letterService from '../services/letter.service';
 import winterScene from '../assets/winter-scene-2048.png';
-import usPhoto from '../assets/us.png'; 
 
 const TOTAL_DAYS = 9; 
 
@@ -20,9 +17,6 @@ function HomePage({ user, onLogout, onOpenGallery }) {
   
   const [showLetterModal, setShowLetterModal] = useState(false);
   const [currentLetter, setCurrentLetter] = useState(null);
-  
-  const [showProposal, setShowProposal] = useState(false);
-  const [showCelebration, setShowCelebration] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -111,6 +105,7 @@ function HomePage({ user, onLogout, onOpenGallery }) {
     setShowLetterModal(false);
     setCurrentLetter(null);
     
+    // Просто помечаем письмо как прочитанное, без вызова пропозала
     if (closedLetterDayIndex !== undefined) {
         setDays(prev => prev.map(day => 
             (day.dayIndex === closedLetterDayIndex)
@@ -118,20 +113,6 @@ function HomePage({ user, onLogout, onOpenGallery }) {
             : day
         ));
     }
-
-    if (closedLetterDayIndex === 3) {
-      setTimeout(() => {
-        setShowProposal(true);
-      }, 800);
-    }
-  };
-
-  const handleAcceptProposal = () => {
-    setShowProposal(false);
-    setShowCelebration(true);
-    setTimeout(() => {
-      setShowCelebration(false);
-    }, 8000);
   };
 
   if (loading) {
@@ -215,14 +196,6 @@ function HomePage({ user, onLogout, onOpenGallery }) {
             text={currentLetter.text}
           />
         )}
-
-        <ProposalModal 
-          isOpen={showProposal}
-          onAccept={handleAcceptProposal}
-          photoSrc={usPhoto}
-        />
-
-        <Celebration isActive={showCelebration} />
       </>
     </div>
   );
