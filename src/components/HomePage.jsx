@@ -6,6 +6,7 @@ import LetterModal from './LetterModal.jsx';
 import storyService from '../services/story.service';
 import letterService from '../services/letter.service';
 import winterScene from '../assets/winter-scene-2048.png';
+import summerScene from '../assets/summer-scene.png';
 
 const TOTAL_DAYS = 9; 
 
@@ -117,7 +118,7 @@ function HomePage({ user, onLogout, onOpenGallery }) {
 
   if (loading) {
     return (
-      <div className="home-wrapper" style={{ backgroundImage: `url(${winterScene})` }}>
+      <div className="home-wrapper" style={{ backgroundImage: `url(${summerScene})` }}>
         <div className="loading-container">✨ Cargando estrellas...</div>
       </div>
     );
@@ -125,14 +126,14 @@ function HomePage({ user, onLogout, onOpenGallery }) {
 
   if (error) {
     return (
-      <div className="home-wrapper" style={{ backgroundImage: `url(${winterScene})` }}>
+      <div className="home-wrapper" style={{ backgroundImage: `url(${summerScene})` }}>
         <div className="error-container">{error}</div>
       </div>
     );
   }
 
   return (
-    <div className="home-wrapper" style={{ backgroundImage: `url(${winterScene})` }}>
+    <div className="home-wrapper" style={{ backgroundImage: `url(${summerScene})` }}>
       
       {/* Кнопка ВЫХОДА */}
       <button 
@@ -173,7 +174,7 @@ function HomePage({ user, onLogout, onOpenGallery }) {
         <div className="fairytale-hint">
           <div className="hint-icon">🕯️</div>
           <div className="hint-content">
-            <h4>Tu Cuento de Invierno</h4>
+            <h4>Nuestro cuento de amor</h4>
             <p>
               Vuelve aquí cada noche y habla con el <strong>Gato Guardián</strong>. 
               Al terminar su historia, se encenderá una estrella... ✨
