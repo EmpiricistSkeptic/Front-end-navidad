@@ -39,7 +39,7 @@ function HomePage({ user, onLogout, onOpenGallery }) {
           const progress = initData.progress.find(p => p.day_index === i);
           daysArray.push({
             dayIndex: i,
-            unlocked: progress?.scene_completed || false, 
+            unlocked: true,
             letterOpened: progress?.letter_opened || false,
             x: coords[i]?.x || 50,
             y: coords[i]?.y || 50,
