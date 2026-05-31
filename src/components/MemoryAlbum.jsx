@@ -52,6 +52,7 @@ import photo_animals_7 from '../assets/hiroshima1.jpg';
 import photo_animals_8 from '../assets/baron.jpg';
 import photo_animals_9 from '../assets/baron1.jpg';
 import photo_animals_10 from '../assets/lapatapilar.jpg';
+import photo_animals_11 from '../assets/lucky.jpg';
 
 
 // --- 2. НАСТРОЙКА КАТЕГОРИЙ И ПОДПИСЕЙ ---
@@ -97,15 +98,14 @@ const categorizedPhotos = {
     { id: 201, src: photo_animals_1, caption: 'La Ranita 🐸' },
     { id: 202, src: photo_animals_2, caption: 'Banda' },
     { id: 203, src: photo_animals_3, caption: 'Stas' },
-    { id: 204, src: photo_animals_4, caption: 'Hirosha' },
-    { id: 205, src: photo_animals_5, caption: 'Viunchik' },
-    { id: 206, src: photo_animals_6, caption: 'Viunchik' },
-    { id: 207, src: photo_animals_7, caption: 'Hiroshima' },
-    { id: 208, src: photo_animals_8, caption: 'Hiroshima again' },
-    { id: 209, src: photo_animals_9, caption: 'Baron' },
-    { id: 210, src: photo_animals_10, caption: 'Baron grosero' },
+    { id: 204, src: photo_animals_4, caption: 'Viunchik' },
+    { id: 205, src: photo_animals_5, caption: 'Viunchik again' },
+    { id: 206, src: photo_animals_6, caption: 'Hiroshima' },
+    { id: 207, src: photo_animals_7, caption: 'Hiroshima again' },
+    { id: 208, src: photo_animals_8, caption: 'Baron' },
+    { id: 209, src: photo_animals_9, caption: 'Baron grosero' },
+    { id: 210, src: photo_animals_10, caption: 'La pata Pilar' },
     { id: 211, src: photo_animals_11, caption: 'Lucky' },
-    { id: 212, src: photo_animals_12, caption: 'La pata Pilar' },
   ],
 };
 
