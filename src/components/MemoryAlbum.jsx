@@ -45,8 +45,13 @@ import photo_her_art_11 from '../assets/figura10.jpg';
 import photo_animals_1 from '../assets/rana.jpg';
 import photo_animals_2 from '../assets/banda.jpg';
 import photo_animals_3 from '../assets/stas.jpg';
-import photo_animals_4 from '../assets/hirosha.jpg';
-import photo_animals_5 from '../assets/hirosha1.jpg';
+import photo_animals_4 from '../assets/viunchik.jpg';
+import photo_animals_5 from '../assets/viunchik1.jpg';
+import photo_animals_6 from '../assets/hiroshima.jpg';
+import photo_animals_7 from '../assets/hiroshima1.jpg';
+import photo_animals_8 from '../assets/baron.jpg';
+import photo_animals_9 from '../assets/baron1.jpg';
+import photo_animals_10 from '../assets/lapatapilar.jpg';
 
 
 // --- 2. НАСТРОЙКА КАТЕГОРИЙ И ПОДПИСЕЙ ---
@@ -93,7 +98,14 @@ const categorizedPhotos = {
     { id: 202, src: photo_animals_2, caption: 'Banda' },
     { id: 203, src: photo_animals_3, caption: 'Stas' },
     { id: 204, src: photo_animals_4, caption: 'Hirosha' },
-    { id: 205, src: photo_animals_5, caption: 'Gay' },
+    { id: 205, src: photo_animals_5, caption: 'Viunchik' },
+    { id: 206, src: photo_animals_5, caption: 'Viunchik' },
+    { id: 207, src: photo_animals_5, caption: 'Hiroshima' },
+    { id: 208, src: photo_animals_5, caption: 'Hiroshima again' },
+    { id: 209, src: photo_animals_5, caption: 'Baron' },
+    { id: 210, src: photo_animals_5, caption: 'Baron grosero' },
+    { id: 211, src: photo_animals_5, caption: 'Lucky' },
+    { id: 212, src: photo_animals_5, caption: 'La pata Pilar' },
   ],
 };
 
