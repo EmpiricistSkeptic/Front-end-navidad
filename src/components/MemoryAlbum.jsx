@@ -27,6 +27,17 @@ import photo_us_20 from '../assets/lesbiana.jpg';
 import photo_us_21 from '../assets/fun.jpg';
 import photo_us_22 from '../assets/fun2.jpg';
 import photo_us_23 from '../assets/bebes.jpg';
+import photo_us_24 from '../assets/baby.jpg';
+import photo_us_25 from '../assets/cara.jpg';
+import photo_us_26 from '../assets/cara2.jpg';
+import photo_us_27 from '../assets/cara3.jpg';
+import photo_us_28 from '../assets/cara4.jpg';
+import photo_us_29 from '../assets/cara5.jpg';
+import photo_us_30 from '../assets/cara6.jpg';
+import photo_us_31 from '../assets/corazon.jpg';
+import photo_us_32 from '../assets/tongue.jpg';
+import photo_us_33 from '../assets/tongue1.jpg';
+import photo_us_34 from '../assets/ojo.jpg';
 
 
 // Категория: Её рисунки (Sus Dibujos / Su Arte)
@@ -81,6 +92,17 @@ const categorizedPhotos = {
     { id: 21, src: photo_us_21, caption: 'Mentira' },
     { id: 22, src: photo_us_22, caption: 'Pista' },
     { id: 23, src: photo_us_23, caption: 'Mis bebes❤️' },
+    { id: 24, src: photo_us_24, caption: '❤️' },
+    { id: 25, src: photo_us_25, caption: '' },
+    { id: 26, src: photo_us_26, caption: '' },
+    { id: 27, src: photo_us_27, caption: '' },
+    { id: 28, src: photo_us_28, caption: '' },
+    { id: 29, src: photo_us_29, caption: '' },
+    { id: 30, src: photo_us_30, caption: '' },
+    { id: 31, src: photo_us_31, caption: '' },
+    { id: 32, src: photo_us_32, caption: '' },
+    { id: 33, src: photo_us_33, caption: '' },
+    { id: 34, src: photo_us_34, caption: '' },
   ],
   "sus_dibujos": [
     { id: 101, src: photo_her_art_1, caption: 'Dibujo de nosotros 🎨' },
