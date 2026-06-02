@@ -38,6 +38,15 @@ import photo_us_31 from '../assets/corazon.jpg';
 import photo_us_32 from '../assets/tongue.jpg';
 import photo_us_33 from '../assets/tongue1.jpg';
 import photo_us_34 from '../assets/ojo.jpg';
+import photo_us_35 from '../assets/linda.jpg';
+import photo_us_36 from '../assets/linda1.jpg';
+import photo_us_37 from '../assets/linda2.jpg';
+import photo_us_38 from '../assets/linda3.jpg';
+import photo_us_39 from '../assets/linda4.jpg';
+import photo_us_40 from '../assets/linda5.jpg';
+import photo_us_41 from '../assets/linda6.jpg';
+import photo_us_42 from '../assets/linda7.jpg';
+import photo_us_43 from '../assets/linda8.jpg';
 
 
 // Категория: Её рисунки (Sus Dibujos / Su Arte)
@@ -103,6 +112,16 @@ const categorizedPhotos = {
     { id: 32, src: photo_us_32, caption: '' },
     { id: 33, src: photo_us_33, caption: '' },
     { id: 34, src: photo_us_34, caption: '' },
+    { id: 35, src: photo_us_35, caption: '' },
+    { id: 36, src: photo_us_36, caption: '' },
+    { id: 37, src: photo_us_37, caption: '' },
+    { id: 38, src: photo_us_38, caption: '' },
+    { id: 39, src: photo_us_39, caption: '' },
+    { id: 40, src: photo_us_40, caption: '' },
+    { id: 41, src: photo_us_41, caption: '' },
+    { id: 42, src: photo_us_42, caption: '' },
+    { id: 43, src: photo_us_43, caption: '' },
+    
   ],
   "sus_dibujos": [
     { id: 101, src: photo_her_art_1, caption: 'Dibujo de nosotros 🎨' },
