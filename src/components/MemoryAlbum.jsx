@@ -47,6 +47,9 @@ import photo_us_40 from '../assets/linda5.jpg';
 import photo_us_41 from '../assets/linda6.jpg';
 import photo_us_42 from '../assets/linda7.jpg';
 import photo_us_43 from '../assets/linda8.jpg';
+import photo_us_44 from '../assets/paraella.jpg';
+import photo_us_45 from '../assets/conmiamor.jpg';
+
 
 
 // Категория: Её рисунки (Sus Dibujos / Su Arte)
@@ -73,6 +76,8 @@ import photo_animals_8 from '../assets/baron.jpg';
 import photo_animals_9 from '../assets/baron1.jpg';
 import photo_animals_10 from '../assets/lapatapilar.jpg';
 import photo_animals_11 from '../assets/lucky.jpg';
+import photo_animals_12 from '../assets/malytka.jpg';
+import photo_animals_13 from '../assets/blanco.jpg';
 
 
 // --- 2. НАСТРОЙКА КАТЕГОРИЙ И ПОДПИСЕЙ ---
@@ -121,6 +126,8 @@ const categorizedPhotos = {
     { id: 41, src: photo_us_41, caption: '' },
     { id: 42, src: photo_us_42, caption: '' },
     { id: 43, src: photo_us_43, caption: '' },
+    { id: 44, src: photo_us_44, caption: '❤️' },
+    { id: 45, src: photo_us_45, caption: 'Con mi amorcito❤️' },
     
   ],
   "sus_dibujos": [
@@ -147,6 +154,9 @@ const categorizedPhotos = {
     { id: 209, src: photo_animals_9, caption: 'Baron grosero' },
     { id: 210, src: photo_animals_10, caption: 'La pata Pilar' },
     { id: 211, src: photo_animals_11, caption: 'Lucky' },
+    { id: 212, src: photo_animals_12, caption: 'Baby' },
+    { id: 213, src: photo_animals_13, caption: 'Blanco' },
+
   ],
 };
 
