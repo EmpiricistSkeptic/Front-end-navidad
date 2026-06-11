@@ -10,7 +10,7 @@ import summerScene from '../assets/summer-scene.png';
 // ▼▼▼ НАСТРОЙ ЭТИ ТРИ КОНСТАНТЫ ▼▼▼
 import photo1 from '../assets/tongue.jpg';
 import photo2 from '../assets/linda5.jpg';
-const LOVE_START_DATE = new Date('2024-02-14T00:00:00');
+const LOVE_START_DATE = new Date('2025-10-30T00:00:00');
 // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
 const TOTAL_DAYS = 9;
