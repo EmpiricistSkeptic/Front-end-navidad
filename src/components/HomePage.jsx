@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import StarMap from './StarMap.jsx';
 import CatSceneModal from './CatSceneModal.jsx';
 import LetterModal from './LetterModal.jsx';
@@ -8,9 +8,9 @@ import letterService from '../services/letter.service';
 import summerScene from '../assets/summer-scene.png';
 
 // ▼▼▼ НАСТРОЙ ЭТИ ТРИ КОНСТАНТЫ ▼▼▼
-import photo1 from '../assets/tongue.jpg';       // твоё фото
-import photo2 from '../assets/linda5.jpg';      // её фото
-const LOVE_START_DATE = new Date('2024-02-14T00:00:00'); // дата начала
+import photo1 from '../assets/photo-me.jpg';
+import photo2 from '../assets/photo-her.jpg';
+const LOVE_START_DATE = new Date('2024-02-14T00:00:00');
 // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
 const TOTAL_DAYS = 9;
@@ -50,30 +50,57 @@ function LoveCounterCard() {
 
   return (
     <div className="love-counter-card">
+      {/* Декоративные звёздочки */}
+      <span className="love-star love-star--1">✦</span>
+      <span className="love-star love-star--2">✦</span>
+      <span className="love-star love-star--3">✦</span>
+
+      {/* Фото */}
       <div className="love-counter-photos">
-        <img src={photo1} alt="Yo" className="love-counter-photo" />
-        <span className="love-counter-heart">♥</span>
-        <img src={photo2} alt="Ella" className="love-counter-photo" />
+        <div className="love-photo-wrapper">
+          <img src={photo1} alt="Yo" className="love-counter-photo" />
+          <div className="love-photo-glow" />
+        </div>
+        <div className="love-heart-pulse">
+          <span className="love-heart-inner">♥</span>
+          <span className="love-heart-ring" />
+        </div>
+        <div className="love-photo-wrapper">
+          <img src={photo2} alt="Ella" className="love-counter-photo" />
+          <div className="love-photo-glow" />
+        </div>
       </div>
 
+      {/* Заголовок */}
       <div className="love-counter-title">Nuestro cuento de amor</div>
-      <div className="love-counter-since">desde el {startLabel}</div>
+      <div className="love-counter-since">✨ desde el {startLabel} ✨</div>
 
+      {/* Разделитель */}
+      <div className="love-divider">
+        <span className="love-divider-line" />
+        <span className="love-divider-dot">♦</span>
+        <span className="love-divider-line" />
+      </div>
+
+      {/* Счётчик */}
       <div className="love-counter-grid">
         <div className="love-counter-cell">
           <span className="love-counter-number">{days}</span>
           <span className="love-counter-label">días</span>
         </div>
+        <div className="love-counter-sep">:</div>
         <div className="love-counter-cell">
           <span className="love-counter-number">{pad(hours)}</span>
           <span className="love-counter-label">horas</span>
         </div>
+        <div className="love-counter-sep">:</div>
         <div className="love-counter-cell">
           <span className="love-counter-number">{pad(mins)}</span>
           <span className="love-counter-label">min</span>
         </div>
+        <div className="love-counter-sep">:</div>
         <div className="love-counter-cell">
-          <span className="love-counter-number">{pad(secs)}</span>
+          <span className="love-counter-number love-counter-number--secs">{pad(secs)}</span>
           <span className="love-counter-label">seg</span>
         </div>
       </div>
@@ -221,7 +248,7 @@ function HomePage({ user, onLogout, onOpenGallery }) {
         </div>
       </header>
 
-      {/* ← НОВЫЙ КОМПОНЕНТ вместо fairytale-hint */}
+      {/* Карточка любви — левый нижний угол */}
       <LoveCounterCard />
 
       {!sceneCompleted && (
