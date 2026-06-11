@@ -9,7 +9,7 @@ import summerScene from '../assets/summer-scene.png';
 
 // ▼▼▼ НАСТРОЙ ЭТИ ТРИ КОНСТАНТЫ ▼▼▼
 import photo1 from '../assets/yo.jpg';
-import photo2 from '../assets/tu.jpg';
+import photo2 from '../assets/tu1.jpg';
 const LOVE_START_DATE = new Date('2025-10-30T00:00:00');
 // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
