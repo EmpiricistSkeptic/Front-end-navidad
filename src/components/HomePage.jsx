@@ -137,21 +137,19 @@ function HomePage({ user, onLogout, onOpenGallery }) {
         const initData = await storyService.initStory();
         setTodayDayIndex(initData.today_day_index);
 
-        // Строим массив звезд строго на основе данных с бэкенда
-        const daysArray = initData.progress.map(p => {
-          const idx = p.day_index;
+        // Берем все ключи (индексы дней) из нашего словаря координат
+        const daysArray = Object.keys(COORDS_MAP).map(key => {
+          const idx = Number(key); // Object.keys возвращает строки, переводим в число
           
-          // Берем координаты из словаря. Если их там нет — вычисляем динамически,
-          // чтобы звезда не сломала карту, если ты забыл прописать координаты.
-          const starX = COORDS_MAP[idx]?.x || (20 + (idx * 13) % 60);
-          const starY = COORDS_MAP[idx]?.y || (20 + (idx * 17) % 60);
+          // Ищем, есть ли у юзера прогресс по этому дню
+          const progress = initData.progress.find(p => p.day_index === idx);
 
           return {
             dayIndex: idx,
-            unlocked: true, 
-            letterOpened: p.letter_opened || false,
-            x: starX,
-            y: starY,
+            unlocked: true, // Звезда доступна для клика
+            letterOpened: progress?.letter_opened || false,
+            x: COORDS_MAP[idx].x,
+            y: COORDS_MAP[idx].y,
           };
         });
 
