@@ -14,15 +14,29 @@ import photo2 from '../assets/tu1.jpg';
 const LOVE_START_DATE = new Date('2025-10-30T00:00:00');
 // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
-const TOTAL_DAYS = 9;
- 
+// Словарь координат для звезд. 
+// Ключ — это day_index из базы. Значение — позиция на экране.
+const COORDS_MAP = {
+  0: { x: 30, y: 70 },
+  1: { x: 42, y: 58 },
+  2: { x: 58, y: 48 },
+  3: { x: 70, y: 35 },
+  4: { x: 55, y: 25 },
+  5: { x: 38, y: 32 },
+  6: { x: 24, y: 45 },
+  7: { x: 68, y: 62 },
+  8: { x: 80, y: 50 },
+  // Письмо на 1 месяц:
+  30: { x: 85, y: 20 }
+};
+
 function pad(n) {
   return String(Math.floor(n)).padStart(2, '0');
 }
- 
+
 function useLoveCounter(startDate) {
   const [counter, setCounter] = useState({ days: 0, hours: 0, mins: 0, secs: 0 });
- 
+
   useEffect(() => {
     const tick = () => {
       const diff = Date.now() - startDate.getTime();
@@ -38,23 +52,23 @@ function useLoveCounter(startDate) {
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, [startDate]);
- 
+
   return counter;
 }
- 
+
 function LoveCounterCard() {
   const { days, hours, mins, secs } = useLoveCounter(LOVE_START_DATE);
- 
+
   const startLabel = LOVE_START_DATE.toLocaleDateString('es-ES', {
     day: 'numeric', month: 'long', year: 'numeric',
   });
- 
+
   return (
     <div className="love-counter-card">
       <span className="love-star love-star--1">✦</span>
       <span className="love-star love-star--2">✦</span>
       <span className="love-star love-star--3">✦</span>
- 
+
       <div className="love-counter-photos">
         <div className="love-photo-wrapper">
           <img src={photo1} alt="Yo" className="love-counter-photo" />
@@ -69,16 +83,16 @@ function LoveCounterCard() {
           <div className="love-photo-glow" />
         </div>
       </div>
- 
+
       <div className="love-counter-title">Nuestro cuento de amor</div>
       <div className="love-counter-since">✨ desde el {startLabel} ✨</div>
- 
+
       <div className="love-divider">
         <span className="love-divider-line" />
         <span className="love-divider-dot">♦</span>
         <span className="love-divider-line" />
       </div>
- 
+
       <div className="love-counter-grid">
         <div className="love-counter-cell">
           <span className="love-counter-number">{days}</span>
@@ -103,7 +117,7 @@ function LoveCounterCard() {
     </div>
   );
 }
- 
+
 function HomePage({ user, onLogout, onOpenGallery }) {
   const [todayDayIndex, setTodayDayIndex] = useState(null);
   const [days, setDays] = useState([]);
@@ -112,40 +126,43 @@ function HomePage({ user, onLogout, onOpenGallery }) {
   const [currentLetter, setCurrentLetter] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
- 
-  // ← новый стейт для Línea del tiempo
+
+  // Стейт для Línea del tiempo
   const [showTimeline, setShowTimeline] = useState(false);
- 
+
   useEffect(() => {
     const init = async () => {
       setLoading(true);
       try {
         const initData = await storyService.initStory();
         setTodayDayIndex(initData.today_day_index);
- 
-        const coords = [
-          { x: 30, y: 70 }, { x: 42, y: 58 }, { x: 58, y: 48 },
-          { x: 70, y: 35 }, { x: 55, y: 25 }, { x: 38, y: 32 },
-          { x: 24, y: 45 }, { x: 68, y: 62 }, { x: 80, y: 50 },
-        ];
- 
-        const daysArray = [];
-        for (let i = 0; i < TOTAL_DAYS; i++) {
-          const progress = initData.progress.find(p => p.day_index === i);
-          daysArray.push({
-            dayIndex: i,
-            unlocked: true,
-            letterOpened: progress?.letter_opened || false,
-            x: coords[i]?.x || 50,
-            y: coords[i]?.y || 50,
-          });
-        }
+
+        // Строим массив звезд строго на основе данных с бэкенда
+        const daysArray = initData.progress.map(p => {
+          const idx = p.day_index;
+          
+          // Берем координаты из словаря. Если их там нет — вычисляем динамически,
+          // чтобы звезда не сломала карту, если ты забыл прописать координаты.
+          const starX = COORDS_MAP[idx]?.x || (20 + (idx * 13) % 60);
+          const starY = COORDS_MAP[idx]?.y || (20 + (idx * 17) % 60);
+
+          return {
+            dayIndex: idx,
+            unlocked: true, 
+            letterOpened: p.letter_opened || false,
+            x: starX,
+            y: starY,
+          };
+        });
+
         setDays(daysArray);
- 
+
+        // Проверяем, пройдена ли сцена для сегодняшнего дня
         const todayProgress = initData.progress.find(
           p => p.day_index === initData.today_day_index
         );
         setSceneCompleted(todayProgress?.scene_completed ?? false);
+
       } catch (err) {
         console.error(err);
         setError('No se pudo cargar la historia estelar.');
@@ -155,7 +172,7 @@ function HomePage({ user, onLogout, onOpenGallery }) {
     };
     init();
   }, []);
- 
+
   const handleSceneCompleted = async (finishedDayIndex) => {
     setSceneCompleted(true);
     const dayToFetch = finishedDayIndex ?? todayDayIndex;
@@ -172,7 +189,7 @@ function HomePage({ user, onLogout, onOpenGallery }) {
       console.error('Error cargando la carta tras la escena:', err);
     }
   };
- 
+
   const handleOpenDay = async (dayIndex) => {
     const day = days.find(d => d.dayIndex === dayIndex);
     if (!day || !day.unlocked) return;
@@ -184,7 +201,7 @@ function HomePage({ user, onLogout, onOpenGallery }) {
       console.error('Error abriendo carta antigua:', err);
     }
   };
- 
+
   const handleLetterClose = () => {
     const closedLetterDayIndex = currentLetter?.day_index;
     setShowLetterModal(false);
@@ -199,12 +216,12 @@ function HomePage({ user, onLogout, onOpenGallery }) {
       );
     }
   };
- 
+
   // ── Рендер Timeline ─────────────────────────────────────────
   if (showTimeline) {
     return <TimelinePage onBack={() => setShowTimeline(false)} />;
   }
- 
+
   // ── Загрузка / ошибка ───────────────────────────────────────
   if (loading) {
     return (
@@ -213,7 +230,7 @@ function HomePage({ user, onLogout, onOpenGallery }) {
       </div>
     );
   }
- 
+
   if (error) {
     return (
       <div className="home-wrapper" style={{ backgroundImage: `url(${summerScene})` }}>
@@ -221,11 +238,11 @@ function HomePage({ user, onLogout, onOpenGallery }) {
       </div>
     );
   }
- 
+
   // ── Главный рендер ──────────────────────────────────────────
   return (
     <div className="home-wrapper" style={{ backgroundImage: `url(${summerScene})` }}>
- 
+
       {/* Кнопка выхода */}
       <button
         className="home-logout"
@@ -234,20 +251,20 @@ function HomePage({ user, onLogout, onOpenGallery }) {
       >
         Salir
       </button>
- 
+
       {/* Кнопка Альбом */}
       <button className="album-btn-home" onClick={onOpenGallery}>
         Nuestro Álbum
       </button>
- 
-      {/* ← НОВАЯ кнопка Línea del tiempo (рядом с альбомом) */}
+
+      {/* Кнопка Línea del tiempo */}
       <button
         className="timeline-btn-home"
         onClick={() => setShowTimeline(true)}
       >
         ✦ Línea del tiempo
       </button>
- 
+
       <div className="home-sky-layer">
         <StarMap
           days={days}
@@ -255,7 +272,7 @@ function HomePage({ user, onLogout, onOpenGallery }) {
           onDayClick={handleOpenDay}
         />
       </div>
- 
+
       <header className="home-header-card">
         <div className="home-greeting">
           ¡Hola, {user.username || 'princesa'}!
@@ -264,17 +281,17 @@ function HomePage({ user, onLogout, onOpenGallery }) {
           Día de la historia: <strong>{todayDayIndex}</strong>
         </div>
       </header>
- 
+
       {/* Счётчик любви — левый нижний угол */}
       <LoveCounterCard />
- 
+
       {!sceneCompleted && (
         <CatSceneModal
           isOpen={!sceneCompleted}
           onSceneCompleted={handleSceneCompleted}
         />
       )}
- 
+
       {showLetterModal && currentLetter && (
         <LetterModal
           isOpen={showLetterModal}
@@ -286,5 +303,5 @@ function HomePage({ user, onLogout, onOpenGallery }) {
     </div>
   );
 }
- 
+
 export default HomePage;
