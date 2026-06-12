@@ -6,6 +6,7 @@ import LetterModal from './LetterModal.jsx';
 import storyService from '../services/story.service';
 import letterService from '../services/letter.service';
 import summerScene from '../assets/summer-scene.png';
+import TimelinePage from './TimelinePage.jsx';
 
 // ▼▼▼ НАСТРОЙ ЭТИ ТРИ КОНСТАНТЫ ▼▼▼
 import photo1 from '../assets/yo.jpg';
