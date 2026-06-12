@@ -38,13 +38,13 @@ const MOMENTS = [
     date: '4 de mayo de 2025',
     shortDate: '4 Mayo 2025',
     title: 'El día que elegimos un nombre para Hirosha',
-    body: 'Sahura, Irosha, Ukiyo. Cual es mejor? Ahora sabemos, baby. Ahora lo sabemos, baby. Quizás para otros solo era elegir un nombre, pero para mí fue uno de esos pequeños momentos que hacen especial una historia. Fue una de las primeras veces que construimos algo juntos, compartiendo ideas, risas y creando un recuerdo que siempre me hará pensar en nosotros.',
+    body: 'Sahura, Irosha, Ukiyo. Cual es mejor? Ahora lo sabemos, baby. Quizás en aquell momento solo era elegir un nombre, pero para mí fue uno de esos pequeños momentos que hacen especial una historia ahora. Fue una de las primeras veces que construimos algo juntos, compartiendo ideas, risas y creando un recuerdo que siempre me hará pensar en nosotros.',
     tags: ['El gato', 'amistad', 'nombre'],
     photo: peque1
   },
   {
     id: 3,
-    icon: '✈',
+    icon: '♥',
     color: 'teal',
     date: '9 de noviembre de 2025',
     shortDate: '9 Nov 2025',

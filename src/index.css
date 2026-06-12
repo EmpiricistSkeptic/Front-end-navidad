@@ -1711,8 +1711,8 @@ body {
 /* Кнопка "Línea del tiempo" — рядом с альбомом */
 .timeline-btn-home {
   position: absolute;        /* или fixed — как у .album-btn-home */
-  top: 20px;
-  left: 160px;               /* отступ от левого края, рядом с альбомом */
+  top: max(75px, env(safe-area-inset-top) + 62px); /* под .album-btn-home (~25px + ~40px высота + 10px зазор) */
+  left: max(25px, env(safe-area-inset-left) + 16px); /* тот же left что у альбома */               /* отступ от левого края, рядом с альбомом */
   z-index: 100;
 
   background: rgba(130, 60, 255, 0.18);
