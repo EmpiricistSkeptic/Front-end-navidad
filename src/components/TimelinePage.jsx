@@ -7,7 +7,7 @@ import { useState } from 'react';
 //  и передай его в поле photo: photo1
 // ─────────────────────────────────────────────────────────────
 
-import peque1 from '../assets/timeline/peque.jpg'
+import peque1 from '../assets/peque.jpg'
 const MOMENTS = [
   {
     id: 0,
