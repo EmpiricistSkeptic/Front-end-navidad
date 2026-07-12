@@ -108,7 +108,7 @@ const MOMENTS = [
     title: 'Nuestro primer partido de fútbol',
     body: 'Nunca imaginé que ver un partido de fútbol contigo pudiera ser tan divertido. Entre comentarios, risas y la emoción de cada jugada, convertimos un simple partido en otro recuerdo bonito para guardar. Y cómo olvidar aquel gol de Colombia que anularon por una razón tan absurda que no pudimos evitar reírnos. Al final, lo mejor del partido no estuvo en el marcador, sino en haberlo vivido juntos. ❤️⚽',
     tags: ['fútbol', 'primer partido', 'Colombia', 'recuerdos'],
-    photo: null,
+    photo: futb,
   },
 
   {
