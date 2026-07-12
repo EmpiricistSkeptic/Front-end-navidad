@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import './galeria.css';
+//import './galeria.css';
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  CONFIGURACIÓN — reemplaza las fotos y ajusta los puntos de cada imagen
