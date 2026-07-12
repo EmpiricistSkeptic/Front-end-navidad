@@ -8,6 +8,8 @@ import { useState } from 'react';
 // ─────────────────────────────────────────────────────────────
 
 import peque1 from '../assets/peque.jpg'
+import unmes from '../assets/unmes.jpg'
+import futb from '../assets/futb.jpg'
 const MOMENTS = [
   {
     id: 0,
@@ -65,7 +67,7 @@ const MOMENTS = [
     photo: null, // ← замени на: import photo from '../assets/timeline/photo2.jpg'
   },
   {
-    id: 4,
+    id: 5,
     icon: '♥',
     color: 'gold',
     date: '19 de Mayo de 2026',
@@ -76,7 +78,7 @@ const MOMENTS = [
     photo: null, // ← замени на: import photo from '../assets/timeline/photo2.jpg'
   },
   {
-    id: 4,
+    id: 6,
     icon: '♥',
     color: 'gold',
     date: '13 de Mayo de 2026',
@@ -85,10 +87,32 @@ const MOMENTS = [
     body: 'Hay días que cambian una vida entera, y para mí este fue uno de ellos. Con los nervios de quien está a punto de dar un paso importante y la ilusión de quien ya sabe lo que siente, te hice una pregunta sencilla, pero llena de significado: "¿Quieres ser mi novia?". Tu respuesta convirtió ese instante en uno de los recuerdos más bonitos de mi vida. Desde ese día comenzó oficialmente nuestra historia, una historia que sigue llenando mis días de felicidad, cariño y momentos inolvidables. ❤️✨',
     tags: ['novia', 'inicio', 'amor'],
     photo: null, // ← reemplaza con: import photo from '../assets/timeline/photo2.jpg'
-},
+  },
+  {
+    id: 7,
+    icon: '♥',
+    color: 'rose',
+    date: '13 de Junio de 2025',
+    shortDate: '13 Jun 2025',
+    title: 'Un mes juntos',
+    body: 'Un mes puede parecer poco para el mundo, pero para mí significó el comienzo de toda una vida contigo. Ese día vimos *Your Name* juntos, compartimos risas, miradas a través de una pantalla y una conexión que iba mucho más allá de la distancia. Entre la ternura, las palabras llenas de amor y la pasión que solo nosotros entendemos, descubrí una vez más que cada instante contigo es especial. Fue nuestro día, un recuerdo que siempre llevaré en el corazón. Te amo. ❤️',
+    tags: ['1 mes', 'Your Name', 'videollamada', 'amor'],
+    photo: unmes,
+  },
+  {
+    id: 8,
+    icon: '⚽',
+    color: 'emerald',
+    date: '28 de junio de 2026',
+    shortDate: '28 Jun 2026',
+    title: 'Nuestro primer partido de fútbol',
+    body: 'Nunca imaginé que ver un partido de fútbol contigo pudiera ser tan divertido. Entre comentarios, risas y la emoción de cada jugada, convertimos un simple partido en otro recuerdo bonito para guardar. Y cómo olvidar aquel gol de Colombia que anularon por una razón tan absurda que no pudimos evitar reírnos. Al final, lo mejor del partido no estuvo en el marcador, sino en haberlo vivido juntos. ❤️⚽',
+    tags: ['fútbol', 'primer partido', 'Colombia', 'recuerdos'],
+    photo: null,
+  },
 
   {
-    id: 5,
+    id: 9,
     icon: '∞',
     color: 'gold-big',
     date: 'Hoy y siempre',
