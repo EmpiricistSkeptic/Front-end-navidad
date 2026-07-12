@@ -16,6 +16,7 @@ import galeria2 from '../assets/galeria/galeria2.jpg';
 import galeria3 from '../assets/galeria/galeria3.jpg';
 import galeria4 from '../assets/galeria/galeria4.jpg';
 import galeria5 from '../assets/galeria/galeria5.jpg';
+import galeria6 from '../assets/galeria/galeria6.jpg';
 
 const OBRAS = [
   {
@@ -145,22 +146,22 @@ const OBRAS = [
 
   {
     id: 6,
-    src: null,
+    src: galeria6,
     titulo: 'Lo que ninguna cámara puede capturar',
     año: '2026',
     tecnica: 'Fotografía digital',
     descripcion: 'La obra más importante de toda esta galería.',
     puntos: [
-      {
+        {
         x: 50,
         y: 22,
         titulo: 'Lo más hermoso',
         texto:
-          'Lo más hermoso de ti nunca aparecerá en una fotografía.\n\nNo es el color de tus ojos.\nNo es tu sonrisa.\nNo es tu belleza.\n\nEs la paz que siento cuando hablo contigo.\nEs la felicidad que traes a mis días.\nEs la persona en la que me convierto cuando estás cerca.\n\nPor eso esta galería nunca podrá retratarte por completo.\nPorque tú eres muchísimo más que cualquier imagen.',
+            'Lo más hermoso de ti nunca podrá capturarse por completo en una fotografía.\n\nNo es solo la simetría de tu rostro o tu belleza exterior.\n\nEs la paz genuina que compartimos en lo cotidiano.\nEs la complicidad absoluta que no necesita filtros.\nEs la certeza de saber que incluso aquellas pequeñas cosas de ti que a veces te hacen dudar de ti misma, yo las amo porque forman parte de la mujer de la que me enamoré.\n\nPor eso esta imagen una de mis favoritas.\nPorque aquí no hay posturas, ni expectativas, ni necesidad de impresionar a nadie.\n\nSimplemente eres tú.\n\nY tú eres muchísimo más que cualquier mirada superficial.',
         esSecreto: true,
-      },
+        },
     ],
-  },
+    },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
