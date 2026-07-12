@@ -2895,3 +2895,892 @@ body {
     max-height: 70vh;
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GALERÍA DE MI MUSA — Estilos premium
+   Importa en GaleriaPage.jsx:  import './galeria.css';
+   O añade todo este contenido a tu CSS global.
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Tokens ─────────────────────────────────────────────────────────────── */
+:root {
+  --gl-negro:       #080810;
+  --gl-oscuro:      #0d0d18;
+  --gl-superficie:  #111120;
+  --gl-borde:       rgba(180, 148, 80, 0.18);
+  --gl-borde-hover: rgba(212, 175, 95, 0.45);
+  --gl-oro:         #c9a84c;
+  --gl-oro-claro:   #e8cc7a;
+  --gl-oro-tenue:   rgba(201, 168, 76, 0.12);
+  --gl-texto:       rgba(232, 220, 195, 0.88);
+  --gl-texto-suave: rgba(200, 185, 155, 0.55);
+  --gl-blanco:      #f5f0e8;
+
+  --gl-font-display: 'Georgia', 'Times New Roman', serif;
+  --gl-font-body:    system-ui, -apple-system, sans-serif;
+  --gl-font-label:   'Georgia', serif;
+}
+
+/* ── Reset del contenedor raíz ──────────────────────────────────────────── */
+.gl-root {
+  position: relative;
+  min-height: 100vh;
+  background: var(--gl-negro);
+  background-image:
+    radial-gradient(ellipse 70% 50% at 50% 0%,   rgba(30, 22, 8, 0.9)   0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 90% 20%,  rgba(20, 15, 5, 0.6)   0%, transparent 55%),
+    radial-gradient(ellipse 40% 60% at 10% 80%,  rgba(15, 18, 25, 0.7)  0%, transparent 60%);
+  color: var(--gl-texto);
+  font-family: var(--gl-font-body);
+  overflow-x: hidden;
+}
+
+/* Textura sutil de fondo */
+.gl-root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+/* ── Botón volver ───────────────────────────────────────────────────────── */
+.gl-btn-volver {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 200;
+  background: rgba(10, 10, 18, 0.75);
+  border: 1px solid var(--gl-borde);
+  color: var(--gl-texto-suave);
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  letter-spacing: 0.04em;
+}
+
+.gl-btn-volver:hover {
+  border-color: var(--gl-borde-hover);
+  color: var(--gl-oro-claro);
+}
+
+/* ── Partículas doradas de fondo ────────────────────────────────────────── */
+.gl-particulas-fondo {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.gl-polvo {
+  position: absolute;
+  bottom: -4px;
+  background: var(--gl-oro);
+  border-radius: 50%;
+  opacity: 0;
+  animation: gl-polvo-subir var(--dur, 10s) ease-in infinite var(--delay, 0s);
+}
+
+@keyframes gl-polvo-subir {
+  0%   { transform: translateY(0)   translateX(0)    scale(0);   opacity: 0; }
+  10%  { opacity: 0.35; }
+  80%  { opacity: 0.15; }
+  100% { transform: translateY(-100vh) translateX(20px) scale(1.5); opacity: 0; }
+}
+
+/* ── Introducción ───────────────────────────────────────────────────────── */
+.gl-intro {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 6rem 2rem 4rem;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.gl-intro-ornamento {
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--gl-oro);
+  opacity: 0.65;
+  margin-bottom: 1.5rem;
+  animation: gl-fade-in 1.5s ease both;
+}
+
+.gl-intro-eyebrow {
+  font-family: var(--gl-font-display);
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gl-oro);
+  opacity: 0.75;
+  margin-bottom: 1.2rem;
+  animation: gl-fade-in 1.6s ease 0.1s both;
+}
+
+.gl-intro-titulo {
+  font-family: var(--gl-font-display);
+  font-size: clamp(38px, 8vw, 68px);
+  font-weight: 400;
+  color: var(--gl-blanco);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin: 0 0 1.5rem;
+  animation: gl-fade-subir 1.4s ease 0.15s both;
+}
+
+.gl-intro-titulo em {
+  font-style: italic;
+  color: var(--gl-oro-claro);
+  text-shadow: 0 0 60px rgba(212, 175, 95, 0.35);
+}
+
+.gl-intro-separador {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 auto 2rem;
+  max-width: 200px;
+  animation: gl-fade-in 1.8s ease 0.3s both;
+}
+
+.gl-intro-separador span:first-child,
+.gl-intro-separador span:last-child {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gl-oro), transparent);
+  opacity: 0.4;
+}
+
+.gl-intro-rombo {
+  color: var(--gl-oro);
+  font-size: 8px;
+  opacity: 0.6;
+}
+
+.gl-intro-texto {
+  font-family: var(--gl-font-display);
+  font-size: clamp(14px, 2.5vw, 17px);
+  line-height: 1.85;
+  color: var(--gl-texto-suave);
+  letter-spacing: 0.02em;
+  margin: 0 0 1.8rem;
+  animation: gl-fade-subir 1.6s ease 0.3s both;
+}
+
+.gl-intro-nota {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gl-oro);
+  opacity: 0.5;
+  border: 1px solid var(--gl-borde);
+  padding: 6px 16px;
+  border-radius: 999px;
+  animation: gl-fade-in 2s ease 0.5s both;
+}
+
+/* ── Galería ────────────────────────────────────────────────────────────── */
+.gl-galeria {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
+  gap: 4rem 3rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 2rem 5rem;
+}
+
+/* ── Obra individual ────────────────────────────────────────────────────── */
+.gl-obra {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.gl-obra--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Marco exterior */
+.gl-marco-exterior {
+  position: relative;
+  padding: 10px;
+  background: linear-gradient(
+    145deg,
+    rgba(201, 168, 76, 0.25) 0%,
+    rgba(120, 95, 40, 0.12) 30%,
+    rgba(201, 168, 76, 0.18) 70%,
+    rgba(160, 125, 55, 0.22) 100%
+  );
+  border-radius: 2px;
+  box-shadow:
+    0 0 0 1px rgba(201, 168, 76, 0.22),
+    0 2px 4px rgba(0, 0, 0, 0.5),
+    0 8px 24px rgba(0, 0, 0, 0.55),
+    0 20px 48px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 240, 180, 0.12);
+  transition: box-shadow 0.5s ease, transform 0.5s ease;
+}
+
+.gl-marco-exterior:hover {
+  box-shadow:
+    0 0 0 1px rgba(201, 168, 76, 0.38),
+    0 2px 6px rgba(0, 0, 0, 0.55),
+    0 12px 40px rgba(0, 0, 0, 0.6),
+    0 28px 64px rgba(0, 0, 0, 0.45),
+    0 0 80px rgba(201, 168, 76, 0.08),
+    inset 0 1px 0 rgba(255, 240, 180, 0.18);
+  transform: translateY(-4px);
+}
+
+/* Marco interior */
+.gl-marco-interior {
+  background: #0a0a14;
+  padding: 8px;
+  border: 1px solid rgba(180, 148, 80, 0.15);
+}
+
+/* Esquinas decorativas del marco */
+.gl-marco-esquina {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: var(--gl-oro);
+  border-style: solid;
+  opacity: 0.55;
+}
+
+.gl-marco-esquina--tl { top: 3px;  left: 3px;  border-width: 1px 0 0 1px; }
+.gl-marco-esquina--tr { top: 3px;  right: 3px; border-width: 1px 1px 0 0; }
+.gl-marco-esquina--bl { bottom: 3px; left: 3px;  border-width: 0 0 1px 1px; }
+.gl-marco-esquina--br { bottom: 3px; right: 3px; border-width: 0 1px 1px 0; }
+
+/* Foto y wrapper */
+.gl-foto-wrap {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+.gl-foto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.8s ease, filter 0.5s ease;
+  filter: sepia(0.08) contrast(1.04) brightness(0.96);
+}
+
+.gl-marco-exterior:hover .gl-foto {
+  transform: scale(1.03);
+  filter: sepia(0.04) contrast(1.06) brightness(1.0);
+}
+
+/* Placeholder */
+.gl-foto-placeholder {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.gl-foto-placeholder-icon {
+  font-size: 28px;
+  color: var(--gl-oro);
+  opacity: 0.3;
+}
+
+.gl-foto-placeholder-text {
+  font-family: var(--gl-font-display);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: rgba(201, 168, 76, 0.3);
+  text-transform: uppercase;
+}
+
+/* Velo sobre la foto */
+.gl-foto-velo {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 55%,
+    rgba(8, 8, 16, 0.45) 100%
+  );
+  pointer-events: none;
+}
+
+/* ── Etiqueta de museo ──────────────────────────────────────────────────── */
+.gl-etiqueta {
+  padding: 1.1rem 0.2rem 0;
+  border-top: 1px solid rgba(201, 168, 76, 0.12);
+  margin-top: 0;
+}
+
+.gl-etiqueta-titulo {
+  font-family: var(--gl-font-label);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--gl-blanco);
+  letter-spacing: 0.01em;
+  margin-bottom: 5px;
+}
+
+.gl-etiqueta-meta {
+  font-size: 11px;
+  color: var(--gl-oro);
+  opacity: 0.6;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.gl-etiqueta-sep {
+  opacity: 0.4;
+}
+
+.gl-etiqueta-desc {
+  font-size: 13px;
+  color: var(--gl-texto-suave);
+  font-style: italic;
+  font-family: var(--gl-font-display);
+  line-height: 1.5;
+}
+
+/* ── Puntos interactivos ────────────────────────────────────────────────── */
+.gl-punto {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+}
+
+.gl-punto-anillo {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(212, 175, 95, 0.6);
+  animation: gl-punto-pulso 2.4s ease-in-out infinite;
+}
+
+.gl-punto-nucleo {
+  width: 8px;
+  height: 8px;
+  background: var(--gl-oro);
+  border-radius: 50%;
+  box-shadow: 0 0 6px 2px rgba(212, 175, 95, 0.5);
+  transition: transform 0.2s ease;
+}
+
+.gl-punto:hover .gl-punto-nucleo,
+.gl-punto:active .gl-punto-nucleo {
+  transform: scale(1.5);
+}
+
+/* Punto secreto — más grande y con color diferente */
+.gl-punto--secreto .gl-punto-anillo {
+  border-color: rgba(255, 220, 130, 0.8);
+  width: 36px;
+  height: 36px;
+  animation-duration: 1.6s;
+}
+
+.gl-punto--secreto .gl-punto-nucleo {
+  background: var(--gl-oro-claro);
+  box-shadow: 0 0 10px 4px rgba(232, 204, 122, 0.6);
+}
+
+@keyframes gl-punto-pulso {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  50%  { transform: scale(1.55); opacity: 0.2; }
+  100% { transform: scale(1);   opacity: 0.7; }
+}
+
+/* ── Overlay del modal ──────────────────────────────────────────────────── */
+.gl-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 4, 10, 0.88);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: gl-fade-in 0.25s ease;
+}
+
+/* ── Modal de cumplido ──────────────────────────────────────────────────── */
+.gl-modal {
+  position: relative;
+  background: linear-gradient(160deg, #0e0e1c 0%, #0a0c16 100%);
+  border: 1px solid rgba(201, 168, 76, 0.28);
+  border-radius: 3px;
+  padding: 2.5rem 2rem 2rem;
+  max-width: 420px;
+  width: 100%;
+  box-shadow:
+    0 0 0 1px rgba(201, 168, 76, 0.08),
+    0 20px 60px rgba(0, 0, 0, 0.7),
+    0 0 120px rgba(201, 168, 76, 0.06);
+  animation: gl-modal-entrar 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gl-modal--secreto {
+  border-color: rgba(232, 204, 122, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(232, 204, 122, 0.12),
+    0 20px 60px rgba(0, 0, 0, 0.8),
+    0 0 150px rgba(201, 168, 76, 0.12);
+}
+
+.gl-modal-cerrar {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(200, 185, 155, 0.45);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.gl-modal-cerrar:hover {
+  color: var(--gl-oro-claro);
+  border-color: var(--gl-borde);
+}
+
+.gl-modal-corona {
+  text-align: center;
+  font-size: 22px;
+  color: var(--gl-oro-claro);
+  margin-bottom: 0.75rem;
+  animation: gl-latir 1.8s ease-in-out infinite;
+}
+
+@keyframes gl-latir {
+  0%, 100% { text-shadow: 0 0 8px rgba(232, 204, 122, 0.4); }
+  50%       { text-shadow: 0 0 24px rgba(232, 204, 122, 0.8); }
+}
+
+.gl-modal-titulo {
+  font-family: var(--gl-font-display);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--gl-blanco);
+  text-align: center;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.85rem;
+}
+
+.gl-modal-separador {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 auto 1.25rem;
+  max-width: 160px;
+}
+
+.gl-modal-sep-linea {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(201, 168, 76, 0.35), transparent);
+}
+
+.gl-modal-sep-rombo {
+  font-size: 7px;
+  color: var(--gl-oro);
+  opacity: 0.55;
+}
+
+.gl-modal-texto {
+  font-family: var(--gl-font-display);
+  font-size: clamp(13px, 2vw, 15px);
+  line-height: 1.85;
+  color: var(--gl-texto-suave);
+  text-align: center;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+/* ── Sección vinilo ─────────────────────────────────────────────────────── */
+.gl-seccion-vinilo {
+  position: relative;
+  z-index: 2;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 4rem 2rem 3rem;
+  text-align: center;
+}
+
+.gl-seccion-vinilo-titulo {
+  font-family: var(--gl-font-display);
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gl-oro);
+  opacity: 0.6;
+  margin-bottom: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.gl-seccion-vinilo-ornamento {
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+/* ── Vinilo ─────────────────────────────────────────────────────────────── */
+.gl-vinilo-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  position: relative;
+}
+
+.gl-vinilo {
+  position: relative;
+  width: 160px;
+  height: 160px;
+}
+
+.gl-vinilo-disco {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #1a1a2e 0%, #0d0d1a 40%, #050508 100%);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(201, 168, 76, 0.08),
+    inset 0 0 30px rgba(0, 0, 0, 0.5);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.gl-vinilo--girando .gl-vinilo-disco {
+  animation: gl-girar 3.2s linear infinite;
+}
+
+@keyframes gl-girar {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.gl-vinilo-surco {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 168, 76, 0.08);
+}
+
+.gl-vinilo-surco--1 { width: 130px; height: 130px; }
+.gl-vinilo-surco--2 { width: 105px; height: 105px; }
+.gl-vinilo-surco--3 { width:  80px; height:  80px; }
+
+.gl-vinilo-centro {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #2a2010 0%, #1a1408 100%);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.gl-vinilo-label {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c9a84c, #8a6820);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gl-vinilo-nota {
+  font-size: 11px;
+  color: #fff8e0;
+}
+
+.gl-vinilo-aguja {
+  position: absolute;
+  top: 8px;
+  right: -10px;
+  width: 50px;
+  height: 2px;
+  background: linear-gradient(to right, rgba(201, 168, 76, 0.6), rgba(201, 168, 76, 0.2));
+  transform-origin: right center;
+  transform: rotate(-28deg);
+  border-radius: 1px;
+}
+
+.gl-vinilo-info {
+  text-align: center;
+}
+
+.gl-vinilo-nombre {
+  font-family: var(--gl-font-display);
+  font-size: 16px;
+  color: var(--gl-blanco);
+  margin-bottom: 4px;
+}
+
+.gl-vinilo-artista {
+  font-size: 12px;
+  color: var(--gl-texto-suave);
+  letter-spacing: 0.1em;
+  font-style: italic;
+}
+
+.gl-vinilo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  color: var(--gl-oro-claro);
+  padding: 11px 24px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-family: var(--gl-font-display);
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gl-vinilo-btn:hover {
+  background: rgba(201, 168, 76, 0.15);
+  border-color: rgba(201, 168, 76, 0.6);
+  box-shadow: 0 0 20px rgba(201, 168, 76, 0.15);
+}
+
+.gl-vinilo-btn-icon {
+  font-size: 11px;
+}
+
+/* ── Partículas musicales ───────────────────────────────────────────────── */
+.gl-particulas {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  width: 100px;
+  height: 80px;
+}
+
+.gl-particula {
+  position: absolute;
+  color: var(--gl-oro);
+  font-size: 13px;
+  left: 50%;
+  bottom: 0;
+  opacity: 0;
+  animation: gl-nota-subir 2.4s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.3s);
+}
+
+@keyframes gl-nota-subir {
+  0%   { transform: translateX(0) translateY(0) scale(0.6); opacity: 0; }
+  20%  { opacity: 0.7; }
+  100% { transform: translateX(var(--x, 0)) translateY(-70px) scale(1.1); opacity: 0; }
+}
+
+/* ── Footer ─────────────────────────────────────────────────────────────── */
+.gl-footer {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 2rem 2rem 4rem;
+}
+
+.gl-footer-ornamento {
+  font-size: 14px;
+  color: var(--gl-oro);
+  opacity: 0.4;
+  margin-bottom: 1rem;
+  letter-spacing: 0.3em;
+}
+
+.gl-footer-texto {
+  font-family: var(--gl-font-display);
+  font-size: 14px;
+  color: var(--gl-texto-suave);
+  line-height: 1.8;
+  font-style: italic;
+  margin: 0 0 2rem;
+}
+
+.gl-footer-linea {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(201, 168, 76, 0.3), transparent);
+  margin: 0 auto;
+}
+
+/* ── Animaciones globales ───────────────────────────────────────────────── */
+@keyframes gl-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes gl-fade-subir {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gl-modal-entrar {
+  from { opacity: 0; transform: scale(0.93) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .gl-intro {
+    padding: 5rem 1.5rem 3rem;
+  }
+
+  .gl-galeria {
+    grid-template-columns: 1fr;
+    gap: 3rem 0;
+    padding: 1rem 1.25rem 3rem;
+  }
+
+  .gl-modal {
+    padding: 2rem 1.5rem 1.75rem;
+  }
+
+  .gl-vinilo-wrap {
+    gap: 1.25rem;
+  }
+}
+
+/* Respeto por reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .gl-vinilo--girando .gl-vinilo-disco,
+  .gl-polvo,
+  .gl-punto-anillo,
+  .gl-particula {
+    animation: none;
+  }
+
+  .gl-obra {
+    transition: none;
+  }
+
+  .gl-marco-exterior:hover {
+    transform: none;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   Добавь этот блок в свой основной CSS файл
+   (рядом с .album-btn-home и .timeline-btn-home)
+───────────────────────────────────────────────────────── */
+
+/* Кнопка "Galería de mi musa" — золотая, музейный стиль */
+.galeria-btn-home {
+  position: absolute;
+  top: max(125px, env(safe-area-inset-top) + 112px); /* под .timeline-btn-home */
+  left: max(25px, env(safe-area-inset-left) + 16px);  /* тот же left что у остальных */
+  z-index: 100;
+
+  background: rgba(15, 12, 5, 0.72);
+  border: 1px solid rgba(201, 168, 76, 0.4);
+  color: #e8cc7a;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-family: 'Georgia', 'Cinzel', serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow:
+    0 0 15px rgba(201, 168, 76, 0.15),
+    inset 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: all 0.4s ease;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.galeria-btn-home::before {
+  content: '◆';
+  font-size: 0.85rem;
+  color: #c9a84c;
+  filter: drop-shadow(0 0 5px rgba(201, 168, 76, 0.7));
+}
+
+@media (hover: hover) {
+  .galeria-btn-home:hover {
+    background: rgba(201, 168, 76, 0.14);
+    border-color: rgba(232, 204, 122, 0.7);
+    color: #fff6dd;
+    box-shadow: 0 0 25px rgba(201, 168, 76, 0.4);
+    transform: translateY(-2px);
+    text-shadow: 0 0 8px rgba(232, 204, 122, 0.6);
+  }
+}
+
+.galeria-btn-home:active {
+  transform: translateY(0);
+}
+
+/* ─────────────────────────────────────────────────────────
+   Если у тебя другие top-отступы для .album-btn-home
+   и .timeline-btn-home, подбери top так, чтобы кнопки
+   не накладывались:
+
+   .album-btn-home    { top: 25px  }  ~40px высота + 10px зазор
+   .timeline-btn-home { top: 75px  }
+   .galeria-btn-home   { top: 125px }
+───────────────────────────────────────────────────────── */

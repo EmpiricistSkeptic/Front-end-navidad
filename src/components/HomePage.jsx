@@ -7,6 +7,7 @@ import storyService from '../services/story.service';
 import letterService from '../services/letter.service';
 import summerScene from '../assets/summer-scene.png';
 import TimelinePage from './TimelinePage.jsx';
+import GaleriaPage from './GaleriaPage.jsx';
 
 // ▼▼▼ НАСТРОЙ ЭТИ ТРИ КОНСТАНТЫ ▼▼▼
 import photo1 from '../assets/yo.jpg';
@@ -130,6 +131,9 @@ function HomePage({ user, onLogout, onOpenGallery }) {
   // Стейт для Línea del tiempo
   const [showTimeline, setShowTimeline] = useState(false);
 
+  // Стейт для Galería de mi musa
+  const [showGaleria, setShowGaleria] = useState(false);
+
   useEffect(() => {
     const init = async () => {
       setLoading(true);
@@ -220,6 +224,11 @@ function HomePage({ user, onLogout, onOpenGallery }) {
     return <TimelinePage onBack={() => setShowTimeline(false)} />;
   }
 
+  // ── Рендер Galería de mi musa ──────────────────────────────
+  if (showGaleria) {
+    return <GaleriaPage onBack={() => setShowGaleria(false)} />;
+  }
+
   // ── Загрузка / ошибка ───────────────────────────────────────
   if (loading) {
     return (
@@ -261,6 +270,14 @@ function HomePage({ user, onLogout, onOpenGallery }) {
         onClick={() => setShowTimeline(true)}
       >
         ✦ Línea del tiempo
+      </button>
+
+      {/* Кнопка Galería de mi musa */}
+      <button
+        className="galeria-btn-home"
+        onClick={() => setShowGaleria(true)}
+      >
+        ◆ Galería de mi musa
       </button>
 
       <div className="home-sky-layer">
