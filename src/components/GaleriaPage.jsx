@@ -11,119 +11,152 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 // ... etc
 // Luego ponlas en el campo `src` de cada obra abajo.
 
+import galeria1 from '../assets/galeria/galeria1.jpg';
+import galeria2 from '../assets/galeria/galeria2.jpg';
+import galeria3 from '../assets/galeria/galeria3.jpg';
+import galeria4 from '../assets/galeria/galeria4.jpg';
+import galeria5 from '../assets/galeria/galeria5.jpg';
+
 const OBRAS = [
   {
     id: 1,
-    src: null, // ← import foto1 from '...'
-    titulo: 'Primera luz',
-    año: '2024',
+    src: null,
+    titulo: 'La mirada que encontré',
+    año: '2026',
     tecnica: 'Fotografía digital',
-    descripcion: 'El momento en que todo comenzó.',
+    descripcion: 'Hay miradas que simplemente se ven. La tuya se siente.',
     puntos: [
       {
-        x: 50, y: 28,
+        x: 50,
+        y: 28,
         titulo: 'Sus ojos',
-        texto: 'Cuando miro tus ojos no veo simplemente un color hermoso. Veo el lugar al que quiero volver siempre. Veo paz. Veo a la persona con la que quiero despertar cada mañana.',
+        texto:
+          'De todos los lugares donde podría perderme, elegiría tus ojos una y otra vez. No porque sean perfectos, sino porque cuando me miran siento una tranquilidad que jamás había conocido. Son los ojos de la mujer de la que me enamoré.',
       },
       {
-        x: 52, y: 48,
-        titulo: 'Su sonrisa',
-        texto: 'Tu sonrisa no es solo una expresión. Es el instante exacto en que el mundo deja de moverse y yo entiendo por qué estoy aquí.',
+        x: 50,
+        y: 52,
+        titulo: 'Su dulzura',
+        texto:
+          'Hay una delicadeza en tu forma de mirar, de sonreír y de existir que hace que todo a tu alrededor parezca un poco más amable. Nunca dejes de ser esa mujer tan increíblemente femenina y auténtica.',
       },
     ],
   },
+
   {
     id: 2,
     src: null,
-    titulo: 'Luz de tarde',
-    año: '2024',
+    titulo: 'La luz que llevas dentro',
+    año: '2026',
     tecnica: 'Fotografía digital',
-    descripcion: 'La luz siempre te encuentra a ti primero.',
+    descripcion: 'Hay sonrisas que iluminan una habitación. La tuya ilumina personas.',
     puntos: [
       {
-        x: 45, y: 22,
-        titulo: 'Su cabello',
-        texto: 'Hay algo en la forma en que el viento mueve tu cabello que me hace querer detener el tiempo. Como si el universo quisiera mostrarte que eres parte de algo poético.',
+        x: 50,
+        y: 42,
+        titulo: 'Su sonrisa',
+        texto:
+          'Tu sonrisa tiene una capacidad extraña: consigue hacerme olvidar cualquier preocupación durante unos segundos. Es como si el mundo bajara el volumen y solo existiera la felicidad de verte sonreír.',
       },
       {
-        x: 55, y: 60,
-        titulo: 'Sus manos',
-        texto: 'Tus manos son las más honestas que he conocido. Cuando me las das, siento que me estás diciendo algo que las palabras nunca podrían terminar de decir.',
+        x: 55,
+        y: 28,
+        titulo: 'Su alegría',
+        texto:
+          'Lo más bonito de tu sonrisa no son tus labios ni tus dientes. Es que siempre nace desde dentro. Es la prueba de que tu luz no depende de nadie; simplemente forma parte de quien eres.',
       },
     ],
   },
+
   {
     id: 3,
     src: null,
-    titulo: 'Instante eterno',
-    año: '2024',
+    titulo: 'Espíritu libre',
+    año: '2026',
     tecnica: 'Fotografía digital',
-    descripcion: 'Algunos momentos duran para siempre.',
+    descripcion: 'Hay personas que hacen que la vida parezca más viva.',
     puntos: [
       {
-        x: 50, y: 35,
-        titulo: 'Su presencia',
-        texto: 'No necesitas hacer nada especial. Tu presencia sola cambia la temperatura de cada habitación en la que entras. Hay personas que iluminan un espacio y luego estás tú, que lo transformas.',
+        x: 50,
+        y: 38,
+        titulo: 'Su energía',
+        texto:
+          'Cuando te veo así, con los brazos abiertos y sonriendo, recuerdo que la felicidad también puede tener una forma. Me encanta esa parte de ti que disfruta el momento sin miedo y convierte lo sencillo en algo inolvidable.',
       },
       {
-        x: 48, y: 65,
+        x: 50,
+        y: 72,
         titulo: 'Su esencia',
-        texto: 'Hay algo en ti que no tiene nombre. No es solo la belleza. Es una combinación de fuerza y ternura que me hace sentir que estar cerca de ti es un privilegio.',
+        texto:
+          'Nunca pierdas esa capacidad de maravillarte con las cosas pequeñas. Es una de las razones por las que el mundo se siente más bonito cuando lo comparto contigo.',
       },
     ],
   },
+
   {
     id: 4,
     src: null,
-    titulo: 'Serenidad',
-    año: '2024',
+    titulo: 'Elegancia',
+    año: '2026',
     tecnica: 'Fotografía digital',
-    descripcion: 'La calma que traes al caos.',
+    descripcion: 'La elegancia nunca necesita llamar la atención.',
     puntos: [
       {
-        x: 50, y: 30,
-        titulo: 'Su rostro',
-        texto: 'Memoricé tu rostro no como se memoriza algo hermoso, sino como se aprende el camino a casa. Sin esfuerzo. Con la certeza de que es el lugar al que pertenezco.',
+        x: 50,
+        y: 28,
+        titulo: 'Su elegancia',
+        texto:
+          'Hay mujeres que intentan parecer elegantes. Tú simplemente lo eres. No depende de la ropa ni del peinado; nace de la forma tranquila y segura con la que ocupas tu lugar en el mundo.',
       },
       {
-        x: 50, y: 55,
-        titulo: 'Su corazón',
-        texto: 'Tienes un corazón que da sin llevar la cuenta. Que quiere sin pedir permiso. Que siente con una intensidad que me enseñó que yo también podía sentir así.',
+        x: 50,
+        y: 55,
+        titulo: 'Quién eres',
+        texto:
+          'Lo que más admiro de ti es que nunca intentas convertirte en alguien distinto para impresionar a los demás. Tu autenticidad tiene mucho más valor que cualquier apariencia.',
       },
     ],
   },
+
   {
     id: 5,
     src: null,
-    titulo: 'Fuerza suave',
-    año: '2024',
+    titulo: 'Más fuerte de lo que crees',
+    año: '2026',
     tecnica: 'Fotografía digital',
-    descripcion: 'La belleza que no necesita demostrarse.',
+    descripcion: 'La verdadera fuerza casi siempre es silenciosa.',
     puntos: [
       {
-        x: 50, y: 25,
-        titulo: 'Su mirada',
-        texto: 'Cuando me miras, no me siento observado. Me siento visto. Hay una diferencia enorme entre las dos cosas, y tú eres de las pocas personas que saben la diferencia.',
+        x: 60,
+        y: 35,
+        titulo: 'Su fuerza',
+        texto:
+          'Cada vez que dudas de ti, desearía que pudieras verte con mis ojos. Descubrirías a una mujer mucho más fuerte de lo que imagina. No solo por lo que puede hacer, sino por todo lo que ha sido capaz de superar.',
       },
       {
-        x: 50, y: 70,
+        x: 50,
+        y: 70,
         titulo: 'Su valentía',
-        texto: 'Lo que más admiro de ti no aparece en ninguna fotografía. Es la forma en que enfrentas lo que te asusta. Callada, sin fanfarria, con una dignidad que me deja sin palabras.',
+        texto:
+          'Admiro tu capacidad de seguir adelante incluso cuando las cosas no son fáciles. No haces ruido, no buscas reconocimiento. Simplemente sigues avanzando. Y eso, para mí, es una de las formas más bonitas de valentía.',
       },
     ],
   },
+
   {
     id: 6,
     src: null,
-    titulo: 'Lo que no se ve',
-    año: '2024',
+    titulo: 'Lo que ninguna cámara puede capturar',
+    año: '2026',
     tecnica: 'Fotografía digital',
-    descripcion: 'La obra más importante de esta galería.',
+    descripcion: 'La obra más importante de toda esta galería.',
     puntos: [
       {
-        x: 50, y: 20,
+        x: 50,
+        y: 22,
         titulo: 'Lo más hermoso',
-        texto: 'Lo más hermoso de ti no puede ser capturado en ninguna fotografía.\n\nEs la forma en que me haces sentir cuando estoy contigo.\nEs la persona que me vuelvo cuando te tengo cerca.\n\nPor eso ninguna imagen de esta galería podrá mostrarte completamente a ti.\nPorque tú eres más que lo que cualquier lente puede contener.',
+        texto:
+          'Lo más hermoso de ti nunca aparecerá en una fotografía.\n\nNo es el color de tus ojos.\nNo es tu sonrisa.\nNo es tu belleza.\n\nEs la paz que siento cuando hablo contigo.\nEs la felicidad que traes a mis días.\nEs la persona en la que me convierto cuando estás cerca.\n\nPor eso esta galería nunca podrá retratarte por completo.\nPorque tú eres muchísimo más que cualquier imagen.',
         esSecreto: true,
       },
     ],
