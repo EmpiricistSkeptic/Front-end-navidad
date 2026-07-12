@@ -20,7 +20,7 @@ import galeria5 from '../assets/galeria/galeria5.jpg';
 const OBRAS = [
   {
     id: 1,
-    src: null,
+    src: galeria1,
     titulo: 'La mirada que encontré',
     año: '2026',
     tecnica: 'Fotografía digital',
@@ -45,7 +45,7 @@ const OBRAS = [
 
   {
     id: 2,
-    src: null,
+    src: galeria2,
     titulo: 'La luz que llevas dentro',
     año: '2026',
     tecnica: 'Fotografía digital',
@@ -70,7 +70,7 @@ const OBRAS = [
 
   {
     id: 3,
-    src: null,
+    src: galeria3,
     titulo: 'Espíritu libre',
     año: '2026',
     tecnica: 'Fotografía digital',
@@ -95,7 +95,7 @@ const OBRAS = [
 
   {
     id: 4,
-    src: null,
+    src: galeria4,
     titulo: 'Elegancia',
     año: '2026',
     tecnica: 'Fotografía digital',
@@ -120,7 +120,7 @@ const OBRAS = [
 
   {
     id: 5,
-    src: null,
+    src: galeria5,
     titulo: 'Más fuerte de lo que crees',
     año: '2026',
     tecnica: 'Fotografía digital',
