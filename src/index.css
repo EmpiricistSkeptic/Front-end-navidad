@@ -3601,6 +3601,79 @@ body {
   font-size: 11px;
 }
 
+/* ── Barra de progreso ──────────────────────────────────────────────────── */
+.gl-vinilo-progreso {
+  width: 200px;
+  height: 2px;
+  background: rgba(201, 168, 76, 0.15);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.gl-vinilo-progreso-barra {
+  height: 100%;
+  background: linear-gradient(to right, rgba(201, 168, 76, 0.5), var(--gl-oro-claro));
+  transition: width 0.2s linear;
+}
+
+/* ── Controles (anterior / play / siguiente) ───────────────────────────── */
+.gl-vinilo-controles {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gl-vinilo-btn-nav {
+  background: rgba(201, 168, 76, 0.06);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  color: var(--gl-oro);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gl-vinilo-btn-nav:hover {
+  background: rgba(201, 168, 76, 0.14);
+  border-color: rgba(201, 168, 76, 0.5);
+  color: var(--gl-oro-claro);
+}
+
+/* ── Lista de canciones (puntos indicadores) ───────────────────────────── */
+.gl-vinilo-lista {
+  display: flex;
+  gap: 8px;
+  margin-top: -0.25rem;
+}
+
+.gl-vinilo-punto-lista {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(201, 168, 76, 0.25);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gl-vinilo-punto-lista:hover {
+  background: rgba(201, 168, 76, 0.5);
+}
+
+.gl-vinilo-punto-lista--activo {
+  background: var(--gl-oro-claro);
+  box-shadow: 0 0 6px rgba(232, 204, 122, 0.6);
+  transform: scale(1.3);
+}
+
 /* ── Partículas musicales ───────────────────────────────────────────────── */
 .gl-particulas {
   position: absolute;
@@ -3715,72 +3788,3 @@ body {
     transform: none;
   }
 }
-
-
-/* ─────────────────────────────────────────────────────────
-   Добавь этот блок в свой основной CSS файл
-   (рядом с .album-btn-home и .timeline-btn-home)
-───────────────────────────────────────────────────────── */
-
-/* Кнопка "Galería de mi musa" — золотая, музейный стиль */
-.galeria-btn-home {
-  position: absolute;
-  top: max(125px, env(safe-area-inset-top) + 112px); /* под .timeline-btn-home */
-  left: max(25px, env(safe-area-inset-left) + 16px);  /* тот же left что у остальных */
-  z-index: 100;
-
-  background: rgba(15, 12, 5, 0.72);
-  border: 1px solid rgba(201, 168, 76, 0.4);
-  color: #e8cc7a;
-  padding: 10px 20px;
-  border-radius: 50px;
-  font-family: 'Georgia', 'Cinzel', serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  cursor: pointer;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow:
-    0 0 15px rgba(201, 168, 76, 0.15),
-    inset 0 0 10px rgba(0, 0, 0, 0.5);
-  transition: all 0.4s ease;
-  white-space: nowrap;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.galeria-btn-home::before {
-  content: '◆';
-  font-size: 0.85rem;
-  color: #c9a84c;
-  filter: drop-shadow(0 0 5px rgba(201, 168, 76, 0.7));
-}
-
-@media (hover: hover) {
-  .galeria-btn-home:hover {
-    background: rgba(201, 168, 76, 0.14);
-    border-color: rgba(232, 204, 122, 0.7);
-    color: #fff6dd;
-    box-shadow: 0 0 25px rgba(201, 168, 76, 0.4);
-    transform: translateY(-2px);
-    text-shadow: 0 0 8px rgba(232, 204, 122, 0.6);
-  }
-}
-
-.galeria-btn-home:active {
-  transform: translateY(0);
-}
-
-/* ─────────────────────────────────────────────────────────
-   Если у тебя другие top-отступы для .album-btn-home
-   и .timeline-btn-home, подбери top так, чтобы кнопки
-   не накладывались:
-
-   .album-btn-home    { top: 25px  }  ~40px высота + 10px зазор
-   .timeline-btn-home { top: 75px  }
-   .galeria-btn-home   { top: 125px }
-───────────────────────────────────────────────────────── */

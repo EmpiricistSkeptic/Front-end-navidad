@@ -5,18 +5,24 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 //  CONFIGURACIÓN — reemplaza las fotos y ajusta los puntos de cada imagen
 // ─────────────────────────────────────────────────────────────────────────────
 
-// Importa tus fotos así:
-// import foto1 from '../assets/galeria/foto1.jpg';
-// import foto2 from '../assets/galeria/foto2.jpg';
-// ... etc
-// Luego ponlas en el campo `src` de cada obra abajo.
-
 import galeria1 from '../assets/galeria/galeria1.jpg';
 import galeria2 from '../assets/galeria/galeria2.jpg';
 import galeria3 from '../assets/galeria/galeria3.jpg';
 import galeria4 from '../assets/galeria/galeria4.jpg';
 import galeria5 from '../assets/galeria/galeria5.jpg';
 import galeria6 from '../assets/galeria/galeria6.jpg';
+
+// ВАЖНО: Добавлен импорт музыки! 
+// Убедись, что путь и расширение (.mp3, .wav) совпадают с твоим файлом.
+import cancion1 from '../assets/cancion1.mp3'; 
+
+const CANCIONES = [
+  {
+    nombre: 'Nuestra canción',
+    artista: 'Solo para ti',
+    src: cancion1,
+  },
+];
 
 const OBRAS = [
   {
@@ -246,11 +252,8 @@ function ObraDeArte({ obra, onPuntoClick, index }) {
       className={`gl-obra ${visible ? 'gl-obra--visible' : ''}`}
       style={{ transitionDelay: `${index * 0.08}s` }}
     >
-      {/* Marco exterior */}
       <div className="gl-marco-exterior">
         <div className="gl-marco-interior">
-
-          {/* Foto o placeholder */}
           <div className="gl-foto-wrap">
             {obra.src ? (
               <img src={obra.src} alt={obra.titulo} className="gl-foto" draggable={false} />
@@ -264,7 +267,6 @@ function ObraDeArte({ obra, onPuntoClick, index }) {
               </div>
             )}
 
-            {/* Puntos interactivos */}
             {obra.puntos.map((punto, i) => (
               <PuntoInteractivo
                 key={i}
@@ -273,20 +275,16 @@ function ObraDeArte({ obra, onPuntoClick, index }) {
               />
             ))}
 
-            {/* Velo sutil */}
             <div className="gl-foto-velo" />
           </div>
-
         </div>
 
-        {/* Esquinas decorativas del marco */}
         <span className="gl-marco-esquina gl-marco-esquina--tl" />
         <span className="gl-marco-esquina gl-marco-esquina--tr" />
         <span className="gl-marco-esquina gl-marco-esquina--bl" />
         <span className="gl-marco-esquina gl-marco-esquina--br" />
       </div>
 
-      {/* Etiqueta de museo */}
       <div className="gl-etiqueta">
         <div className="gl-etiqueta-titulo">{obra.titulo}</div>
         <div className="gl-etiqueta-meta">
@@ -305,22 +303,43 @@ function ObraDeArte({ obra, onPuntoClick, index }) {
 // ─────────────────────────────────────────────────────────────────────────────
 function VinylPlayer() {
   const [playing, setPlaying] = useState(false);
-  const [cancion] = useState('Nuestra canción');
   const audioRef = useRef(null);
+  
+  // Берем первую песню из массива
+  const cancionActual = CANCIONES[0];
 
-  // Para usar audio real:
-  // const audioRef = useRef(new Audio('/assets/nuestra-cancion.mp3'));
-  // audioRef.current.loop = true;
+  // Останавливаем музыку, если компонент размонтируется (например, при смене страницы)
+  useEffect(() => {
+    const audioElement = audioRef.current;
+    return () => {
+      if (audioElement) {
+        audioElement.pause();
+      }
+    };
+  }, []);
 
   const toggle = () => {
-    setPlaying(p => !p);
-    // Si tienes audio real:
-    // if (playing) audioRef.current.pause();
-    // else audioRef.current.play();
+    if (!audioRef.current) return;
+
+    if (playing) {
+      audioRef.current.pause();
+      setPlaying(false);
+    } else {
+      audioRef.current.play()
+        .then(() => {
+          setPlaying(true);
+        })
+        .catch((error) => {
+          console.error("Error al reproducir el audio:", error);
+        });
+    }
   };
 
   return (
     <div className="gl-vinilo-wrap">
+      {/* Скрытый HTML5 аудио элемент */}
+      <audio ref={audioRef} src={cancionActual.src} loop />
+
       <div className={`gl-vinilo ${playing ? 'gl-vinilo--girando' : ''}`}>
         <div className="gl-vinilo-disco">
           <div className="gl-vinilo-surco gl-vinilo-surco--1" />
@@ -336,8 +355,8 @@ function VinylPlayer() {
       </div>
 
       <div className="gl-vinilo-info">
-        <div className="gl-vinilo-nombre">{cancion}</div>
-        <div className="gl-vinilo-artista">Solo para ti</div>
+        <div className="gl-vinilo-nombre">{cancionActual.nombre}</div>
+        <div className="gl-vinilo-artista">{cancionActual.artista}</div>
       </div>
 
       <button className="gl-vinilo-btn" onClick={toggle}>
