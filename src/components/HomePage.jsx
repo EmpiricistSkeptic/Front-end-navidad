@@ -28,7 +28,8 @@ const COORDS_MAP = {
   7: { x: 68, y: 62 },
   8: { x: 80, y: 50 },
   // Письмо на 1 месяц (agregado por ti):
-  30: { x: 85, y: 20 }
+  30: { x: 85, y: 20 },
+  60: { x: 15, y: 25 }
 };
 
 function pad(n) {
