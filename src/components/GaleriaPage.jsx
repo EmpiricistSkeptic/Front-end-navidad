@@ -14,7 +14,7 @@ import galeria6 from '../assets/galeria/galeria6.jpg';
 
 // ВАЖНО: Добавлен импорт музыки! 
 // Убедись, что путь и расширение (.mp3, .wav) совпадают с твоим файлом.
-import cancion1 from '../assets/cancion1.mp3'; 
+import cancion1 from '../assets/songs/cancion1.mp3'; 
 
 const CANCIONES = [
   {
