@@ -18,6 +18,8 @@ import galeria4 from '../assets/galeria/galeria4.jpg';
 import galeria5 from '../assets/galeria/galeria5.jpg';
 import galeria6 from '../assets/galeria/galeria6.jpg';
 
+import cancion1 from '../assets/songs/cancion1.mp3'; 
+
 
 const CANCIONES = [
   {
