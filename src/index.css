@@ -2900,7 +2900,10 @@ body {
 /* ═══════════════════════════════════════════════════════════════════════════
    GALERÍA DE MI MUSA — Estilos premium
    Importa en GaleriaPage.jsx:  import './galeria.css';
-   O añade todo este contenido a tu CSS global.
+
+   ⚠️ ESTE ARCHIVO SOLO CONTIENE ESTILOS DE LA PÁGINA GaleriaPage.
+   Los estilos del botón "Galería de mi musa" (el que está en HomePage)
+   viven en un archivo aparte: galeria-btn-home.css
 ═══════════════════════════════════════════════════════════════════════════ */
 
 /* ── Tokens ─────────────────────────────────────────────────────────────── */
@@ -3332,27 +3335,35 @@ body {
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
+  overflow-y: auto;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   animation: gl-fade-in 0.25s ease;
 }
-
+ 
 /* ── Modal de cumplido ──────────────────────────────────────────────────── */
+/* CAMBIO: el modal ya NO scrollea él mismo. Ahora es un flex-column con
+   altura máxima, y overflow:hidden para que nada se salga de sus bordes. */
 .gl-modal {
   position: relative;
   background: linear-gradient(160deg, #0e0e1c 0%, #0a0c16 100%);
   border: 1px solid rgba(201, 168, 76, 0.28);
   border-radius: 3px;
-  padding: 2.5rem 2rem 2rem;
   max-width: 420px;
   width: 100%;
+  max-height: 85vh;
+ 
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+ 
   box-shadow:
     0 0 0 1px rgba(201, 168, 76, 0.08),
     0 20px 60px rgba(0, 0, 0, 0.7),
     0 0 120px rgba(201, 168, 76, 0.06);
   animation: gl-modal-entrar 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
-
+ 
 .gl-modal--secreto {
   border-color: rgba(232, 204, 122, 0.45);
   box-shadow:
@@ -3360,14 +3371,18 @@ body {
     0 20px 60px rgba(0, 0, 0, 0.8),
     0 0 150px rgba(201, 168, 76, 0.12);
 }
-
+ 
+/* NUEVO: botón cerrar — FUERA del área de scroll, siempre visible.
+   Al ser hijo directo de .gl-modal (que ya no scrollea), se queda fijo
+   en su esquina sin importar cuánto texto haya debajo. */
 .gl-modal-cerrar {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: rgba(200, 185, 155, 0.45);
+  z-index: 10;
+  background: rgba(20, 16, 8, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(200, 185, 155, 0.6);
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -3377,13 +3392,47 @@ body {
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
+  backdrop-filter: blur(4px);
 }
-
+ 
 .gl-modal-cerrar:hover {
   color: var(--gl-oro-claro);
-  border-color: var(--gl-borde);
+  border-color: var(--gl-borde-hover);
+  background: rgba(20, 16, 8, 0.8);
 }
-
+ 
+/* NUEVO: área scrolleable — el ÚNICO elemento que hace scroll.
+   flex:1 + min-height:0 es lo que permite que este hijo flex pueda
+   scrollear correctamente dentro del contenedor de altura limitada.
+   IMPORTANTE: en tu JSX, envuelve el contenido del modal (corona, título,
+   separador, texto) dentro de un <div className="gl-modal-scroll">. */
+.gl-modal-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 2.75rem 2rem 2rem;
+ 
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 168, 76, 0.35) transparent;
+}
+ 
+.gl-modal-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+ 
+.gl-modal-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+ 
+.gl-modal-scroll::-webkit-scrollbar-thumb {
+  background: rgba(201, 168, 76, 0.3);
+  border-radius: 999px;
+}
+ 
+.gl-modal-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 168, 76, 0.5);
+}
+ 
 .gl-modal-corona {
   text-align: center;
   font-size: 22px;
@@ -3391,12 +3440,12 @@ body {
   margin-bottom: 0.75rem;
   animation: gl-latir 1.8s ease-in-out infinite;
 }
-
+ 
 @keyframes gl-latir {
   0%, 100% { text-shadow: 0 0 8px rgba(232, 204, 122, 0.4); }
   50%       { text-shadow: 0 0 24px rgba(232, 204, 122, 0.8); }
 }
-
+ 
 .gl-modal-titulo {
   font-family: var(--gl-font-display);
   font-size: 20px;
@@ -3406,7 +3455,7 @@ body {
   letter-spacing: 0.03em;
   margin-bottom: 0.85rem;
 }
-
+ 
 .gl-modal-separador {
   display: flex;
   align-items: center;
@@ -3414,19 +3463,19 @@ body {
   margin: 0 auto 1.25rem;
   max-width: 160px;
 }
-
+ 
 .gl-modal-sep-linea {
   flex: 1;
   height: 1px;
   background: linear-gradient(to right, transparent, rgba(201, 168, 76, 0.35), transparent);
 }
-
+ 
 .gl-modal-sep-rombo {
   font-size: 7px;
   color: var(--gl-oro);
   opacity: 0.55;
 }
-
+ 
 .gl-modal-texto {
   font-family: var(--gl-font-display);
   font-size: clamp(13px, 2vw, 15px);
@@ -3436,7 +3485,7 @@ body {
   margin: 0;
   letter-spacing: 0.02em;
 }
-
+ 
 /* ── Sección vinilo ─────────────────────────────────────────────────────── */
 .gl-seccion-vinilo {
   position: relative;
@@ -3446,7 +3495,7 @@ body {
   padding: 4rem 2rem 3rem;
   text-align: center;
 }
-
+ 
 .gl-seccion-vinilo-titulo {
   font-family: var(--gl-font-display);
   font-size: 13px;
@@ -3460,12 +3509,12 @@ body {
   justify-content: center;
   gap: 10px;
 }
-
+ 
 .gl-seccion-vinilo-ornamento {
   font-size: 16px;
   opacity: 0.7;
 }
-
+ 
 /* ── Vinilo ─────────────────────────────────────────────────────────────── */
 .gl-vinilo-wrap {
   display: flex;
@@ -3474,13 +3523,13 @@ body {
   gap: 1.5rem;
   position: relative;
 }
-
+ 
 .gl-vinilo {
   position: relative;
   width: 160px;
   height: 160px;
 }
-
+ 
 .gl-vinilo-disco {
   width: 160px;
   height: 160px;
@@ -3497,26 +3546,26 @@ body {
   justify-content: center;
   transition: transform 0.3s ease;
 }
-
+ 
 .gl-vinilo--girando .gl-vinilo-disco {
   animation: gl-girar 3.2s linear infinite;
 }
-
+ 
 @keyframes gl-girar {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 }
-
+ 
 .gl-vinilo-surco {
   position: absolute;
   border-radius: 50%;
   border: 1px solid rgba(201, 168, 76, 0.08);
 }
-
+ 
 .gl-vinilo-surco--1 { width: 130px; height: 130px; }
 .gl-vinilo-surco--2 { width: 105px; height: 105px; }
 .gl-vinilo-surco--3 { width:  80px; height:  80px; }
-
+ 
 .gl-vinilo-centro {
   width: 38px;
   height: 38px;
@@ -3528,7 +3577,7 @@ body {
   justify-content: center;
   z-index: 2;
 }
-
+ 
 .gl-vinilo-label {
   width: 24px;
   height: 24px;
@@ -3538,12 +3587,12 @@ body {
   align-items: center;
   justify-content: center;
 }
-
+ 
 .gl-vinilo-nota {
   font-size: 11px;
   color: #fff8e0;
 }
-
+ 
 .gl-vinilo-aguja {
   position: absolute;
   top: 8px;
@@ -3555,25 +3604,25 @@ body {
   transform: rotate(-28deg);
   border-radius: 1px;
 }
-
+ 
 .gl-vinilo-info {
   text-align: center;
 }
-
+ 
 .gl-vinilo-nombre {
   font-family: var(--gl-font-display);
   font-size: 16px;
   color: var(--gl-blanco);
   margin-bottom: 4px;
 }
-
+ 
 .gl-vinilo-artista {
   font-size: 12px;
   color: var(--gl-texto-suave);
   letter-spacing: 0.1em;
   font-style: italic;
 }
-
+ 
 .gl-vinilo-btn {
   display: inline-flex;
   align-items: center;
@@ -3590,17 +3639,17 @@ body {
   transition: all 0.35s ease;
   -webkit-tap-highlight-color: transparent;
 }
-
+ 
 .gl-vinilo-btn:hover {
   background: rgba(201, 168, 76, 0.15);
   border-color: rgba(201, 168, 76, 0.6);
   box-shadow: 0 0 20px rgba(201, 168, 76, 0.15);
 }
-
+ 
 .gl-vinilo-btn-icon {
   font-size: 11px;
 }
-
+ 
 /* ── Barra de progreso ──────────────────────────────────────────────────── */
 .gl-vinilo-progreso {
   width: 200px;
@@ -3609,20 +3658,20 @@ body {
   border-radius: 999px;
   overflow: hidden;
 }
-
+ 
 .gl-vinilo-progreso-barra {
   height: 100%;
   background: linear-gradient(to right, rgba(201, 168, 76, 0.5), var(--gl-oro-claro));
   transition: width 0.2s linear;
 }
-
+ 
 /* ── Controles (anterior / play / siguiente) ───────────────────────────── */
 .gl-vinilo-controles {
   display: flex;
   align-items: center;
   gap: 12px;
 }
-
+ 
 .gl-vinilo-btn-nav {
   background: rgba(201, 168, 76, 0.06);
   border: 1px solid rgba(201, 168, 76, 0.25);
@@ -3638,20 +3687,20 @@ body {
   transition: all 0.3s ease;
   -webkit-tap-highlight-color: transparent;
 }
-
+ 
 .gl-vinilo-btn-nav:hover {
   background: rgba(201, 168, 76, 0.14);
   border-color: rgba(201, 168, 76, 0.5);
   color: var(--gl-oro-claro);
 }
-
+ 
 /* ── Lista de canciones (puntos indicadores) ───────────────────────────── */
 .gl-vinilo-lista {
   display: flex;
   gap: 8px;
   margin-top: -0.25rem;
 }
-
+ 
 .gl-vinilo-punto-lista {
   width: 6px;
   height: 6px;
@@ -3663,17 +3712,17 @@ body {
   transition: all 0.3s ease;
   -webkit-tap-highlight-color: transparent;
 }
-
+ 
 .gl-vinilo-punto-lista:hover {
   background: rgba(201, 168, 76, 0.5);
 }
-
+ 
 .gl-vinilo-punto-lista--activo {
   background: var(--gl-oro-claro);
   box-shadow: 0 0 6px rgba(232, 204, 122, 0.6);
   transform: scale(1.3);
 }
-
+ 
 /* ── Partículas musicales ───────────────────────────────────────────────── */
 .gl-particulas {
   position: absolute;
@@ -3684,7 +3733,7 @@ body {
   width: 100px;
   height: 80px;
 }
-
+ 
 .gl-particula {
   position: absolute;
   color: var(--gl-oro);
@@ -3695,13 +3744,13 @@ body {
   animation: gl-nota-subir 2.4s ease-in-out infinite;
   animation-delay: calc(var(--i) * 0.3s);
 }
-
+ 
 @keyframes gl-nota-subir {
   0%   { transform: translateX(0) translateY(0) scale(0.6); opacity: 0; }
   20%  { opacity: 0.7; }
   100% { transform: translateX(var(--x, 0)) translateY(-70px) scale(1.1); opacity: 0; }
 }
-
+ 
 /* ── Footer ─────────────────────────────────────────────────────────────── */
 .gl-footer {
   position: relative;
@@ -3709,7 +3758,7 @@ body {
   text-align: center;
   padding: 2rem 2rem 4rem;
 }
-
+ 
 .gl-footer-ornamento {
   font-size: 14px;
   color: var(--gl-oro);
@@ -3717,7 +3766,7 @@ body {
   margin-bottom: 1rem;
   letter-spacing: 0.3em;
 }
-
+ 
 .gl-footer-texto {
   font-family: var(--gl-font-display);
   font-size: 14px;
@@ -3726,51 +3775,55 @@ body {
   font-style: italic;
   margin: 0 0 2rem;
 }
-
+ 
 .gl-footer-linea {
   width: 60px;
   height: 1px;
   background: linear-gradient(to right, transparent, rgba(201, 168, 76, 0.3), transparent);
   margin: 0 auto;
 }
-
+ 
 /* ── Animaciones globales ───────────────────────────────────────────────── */
 @keyframes gl-fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-
+ 
 @keyframes gl-fade-subir {
   from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
+ 
 @keyframes gl-modal-entrar {
   from { opacity: 0; transform: scale(0.93) translateY(10px); }
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
-
+ 
 /* ── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .gl-intro {
     padding: 5rem 1.5rem 3rem;
   }
-
+ 
   .gl-galeria {
     grid-template-columns: 1fr;
     gap: 3rem 0;
     padding: 1rem 1.25rem 3rem;
   }
-
+ 
   .gl-modal {
-    padding: 2rem 1.5rem 1.75rem;
+    max-height: 80vh;
   }
-
+ 
+  .gl-modal-scroll {
+    padding: 2.5rem 1.5rem 1.75rem;
+  }
+ 
   .gl-vinilo-wrap {
     gap: 1.25rem;
   }
 }
-
+ 
 /* Respeto por reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .gl-vinilo--girando .gl-vinilo-disco,
@@ -3779,27 +3832,31 @@ body {
   .gl-particula {
     animation: none;
   }
-
+ 
   .gl-obra {
     transition: none;
   }
-
+ 
   .gl-marco-exterior:hover {
     transform: none;
   }
 }
 
 
-/* ─────────────────────────────────────────────────────────
-   Добавь этот блок в свой основной CSS файл
-   (рядом с .album-btn-home и .timeline-btn-home)
-───────────────────────────────────────────────────────── */
 
-/* Кнопка "Galería de mi musa" — золотая, музейный стиль */
+/* ═══════════════════════════════════════════════════════════════════════════
+   BOTÓN "Galería de mi musa" — vive en HomePage, no en GaleriaPage.
+
+   ⚠️ IMPORTANTE: este bloque debe ir en tu CSS PRINCIPAL/GLOBAL
+   (el mismo archivo donde están .album-btn-home y .timeline-btn-home),
+   NO dentro de galeria.css — porque GaleriaPage no renderiza este botón,
+   solo HomePage lo hace.
+═══════════════════════════════════════════════════════════════════════════ */
+
 .galeria-btn-home {
   position: absolute;
-  top: max(125px, env(safe-area-inset-top) + 112px); /* под .timeline-btn-home */
-  left: max(25px, env(safe-area-inset-left) + 16px);  /* тот же left что у остальных */
+  top: max(125px, env(safe-area-inset-top) + 112px); /* debajo de .timeline-btn-home */
+  left: max(25px, env(safe-area-inset-left) + 16px);  /* mismo left que los demás botones */
   z-index: 100;
 
   background: rgba(15, 12, 5, 0.72);
@@ -3849,11 +3906,11 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────
-   Если у тебя другие top-отступы для .album-btn-home
-   и .timeline-btn-home, подбери top так, чтобы кнопки
-   не накладывались:
+   Si tus otros botones (.album-btn-home, .timeline-btn-home)
+   usan otros valores de "top", ajusta este para que no se
+   superpongan. Referencia usada aquí:
 
-   .album-btn-home    { top: 25px  }  ~40px высота + 10px зазор
+   .album-btn-home    { top: 25px  }
    .timeline-btn-home { top: 75px  }
    .galeria-btn-home   { top: 125px }
 ───────────────────────────────────────────────────────── */

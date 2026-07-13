@@ -190,6 +190,13 @@ function PuntoInteractivo({ punto, onOpen }) {
 // ─────────────────────────────────────────────────────────────────────────────
 //  COMPONENTE: Modal de cumplido
 // ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+//  COMPONENTE: Modal de cumplido
+//  ESTRUCTURA CORREGIDA:
+//  - .gl-modal ahora es solo el contenedor (no scrollea él mismo)
+//  - .gl-modal-cerrar está FUERA del área de scroll → siempre visible
+//  - .gl-modal-scroll es el único elemento que scrollea
+// ─────────────────────────────────────────────────────────────────────────────
 function ModalCumplido({ punto, onClose }) {
   useEffect(() => {
     const handler = (e) => e.key === 'Escape' && onClose();
@@ -202,25 +209,31 @@ function ModalCumplido({ punto, onClose }) {
   return (
     <div className="gl-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className={`gl-modal ${punto.esSecreto ? 'gl-modal--secreto' : ''}`}>
+
+        {/* Botón de cerrar — FUERA del área scrolleable, siempre visible */}
         <button className="gl-modal-cerrar" onClick={onClose} aria-label="Cerrar">✕</button>
 
-        {punto.esSecreto && (
-          <div className="gl-modal-corona">✦</div>
-        )}
+        {/* Área scrolleable — todo el contenido va aquí dentro */}
+        <div className="gl-modal-scroll">
+          {punto.esSecreto && (
+            <div className="gl-modal-corona">✦</div>
+          )}
 
-        <div className="gl-modal-titulo">{punto.titulo}</div>
+          <div className="gl-modal-titulo">{punto.titulo}</div>
 
-        <div className="gl-modal-separador">
-          <span className="gl-modal-sep-linea" />
-          <span className="gl-modal-sep-rombo">◆</span>
-          <span className="gl-modal-sep-linea" />
+          <div className="gl-modal-separador">
+            <span className="gl-modal-sep-linea" />
+            <span className="gl-modal-sep-rombo">◆</span>
+            <span className="gl-modal-sep-linea" />
+          </div>
+
+          <p className="gl-modal-texto">
+            {punto.texto.split('\n').map((line, i) =>
+              line === '' ? <br key={i} /> : <span key={i}>{line}<br /></span>
+            )}
+          </p>
         </div>
 
-        <p className="gl-modal-texto">
-          {punto.texto.split('\n').map((line, i) =>
-            line === '' ? <br key={i} /> : <span key={i}>{line}<br /></span>
-          )}
-        </p>
       </div>
     </div>
   );
