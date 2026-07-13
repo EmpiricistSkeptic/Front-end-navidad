@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom'; // НОВЫЙ ИМПОРТ ДЛЯ ИДЕАЛЬНОГО ОКНА
 import StarMap from './StarMap.jsx';
 import CatSceneModal from './CatSceneModal.jsx';
 import LetterModal from './LetterModal.jsx';
@@ -15,8 +16,7 @@ import photo2 from '../assets/tu1.jpg';
 const LOVE_START_DATE = new Date('2025-10-30T00:00:00');
 // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
-// Словарь координат для звезд. 
-// Ключ — это day_index из базы. Значение — позиция на экране.
+// Словарь координат для звезд
 const COORDS_MAP = {
   0: { x: 30, y: 70 },
   1: { x: 42, y: 58 },
@@ -27,10 +27,22 @@ const COORDS_MAP = {
   6: { x: 24, y: 45 },
   7: { x: 68, y: 62 },
   8: { x: 80, y: 50 },
-  // Письмо на 1 месяц (agregado por ti):
   30: { x: 85, y: 20 },
+  // ▼ Новое письмо:
   60: { x: 15, y: 25 }
 };
+
+// Минимальный CSS только для анимаций (не для дизайна)
+const animationStyles = `
+  @keyframes fadeOverlay { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes popCard { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+  @keyframes floatGold { 
+    0% { transform: translateY(0); opacity: 0; } 
+    20% { opacity: 0.8; } 
+    80% { opacity: 0.8; } 
+    100% { transform: translateY(-150px); opacity: 0; } 
+  }
+`;
 
 function pad(n) {
   return String(Math.floor(n)).padStart(2, '0');
@@ -60,7 +72,6 @@ function useLoveCounter(startDate) {
 
 function LoveCounterCard() {
   const { days, hours, mins, secs } = useLoveCounter(LOVE_START_DATE);
-
   const startLabel = LOVE_START_DATE.toLocaleDateString('es-ES', {
     day: 'numeric', month: 'long', year: 'numeric',
   });
@@ -70,7 +81,6 @@ function LoveCounterCard() {
       <span className="love-star love-star--1">✦</span>
       <span className="love-star love-star--2">✦</span>
       <span className="love-star love-star--3">✦</span>
-
       <div className="love-counter-photos">
         <div className="love-photo-wrapper">
           <img src={photo1} alt="Yo" className="love-counter-photo" />
@@ -85,36 +95,21 @@ function LoveCounterCard() {
           <div className="love-photo-glow" />
         </div>
       </div>
-
       <div className="love-counter-title">Nuestro cuento de amor</div>
       <div className="love-counter-since">✨ desde el {startLabel} ✨</div>
-
       <div className="love-divider">
         <span className="love-divider-line" />
         <span className="love-divider-dot">♦</span>
         <span className="love-divider-line" />
       </div>
-
       <div className="love-counter-grid">
-        <div className="love-counter-cell">
-          <span className="love-counter-number">{days}</span>
-          <span className="love-counter-label">días</span>
-        </div>
+        <div className="love-counter-cell"><span className="love-counter-number">{days}</span><span className="love-counter-label">días</span></div>
         <div className="love-counter-sep">:</div>
-        <div className="love-counter-cell">
-          <span className="love-counter-number">{pad(hours)}</span>
-          <span className="love-counter-label">horas</span>
-        </div>
+        <div className="love-counter-cell"><span className="love-counter-number">{pad(hours)}</span><span className="love-counter-label">horas</span></div>
         <div className="love-counter-sep">:</div>
-        <div className="love-counter-cell">
-          <span className="love-counter-number">{pad(mins)}</span>
-          <span className="love-counter-label">min</span>
-        </div>
+        <div className="love-counter-cell"><span className="love-counter-number">{pad(mins)}</span><span className="love-counter-label">min</span></div>
         <div className="love-counter-sep">:</div>
-        <div className="love-counter-cell">
-          <span className="love-counter-number love-counter-number--secs">{pad(secs)}</span>
-          <span className="love-counter-label">seg</span>
-        </div>
+        <div className="love-counter-cell"><span className="love-counter-number love-counter-number--secs">{pad(secs)}</span><span className="love-counter-label">seg</span></div>
       </div>
     </div>
   );
@@ -128,30 +123,23 @@ function HomePage({ user, onLogout, onOpenGallery }) {
   const [currentLetter, setCurrentLetter] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Стейт для Línea del tiempo y Galería
   const [showTimeline, setShowTimeline] = useState(false);
   const [showGaleria, setShowGaleria] = useState(false);
 
-  // ▼▼▼ NUEVO ESTADO PARA LA ANIMACIÓN DE ANIVERSARIO ▼▼▼
+  // Стейт для анимации годовщины
   const [showAnniversary, setShowAnniversary] = useState(false);
 
-  // Verificar si es día 13
   useEffect(() => {
     const today = new Date();
-    // Si hoy es el día 13 del mes, mostramos la animación
+    // Активируется каждое 13 число
     if (today.getDate() === 13) {
       setShowAnniversary(true);
-
-      // La animación dura 15 segundos y luego desaparece
       const timer = setTimeout(() => {
         setShowAnniversary(false);
       }, 15000);
-
-      return () => clearTimeout(timer); // Limpieza del temporizador
+      return () => clearTimeout(timer);
     }
   }, []);
-  // ▲▲▲ FIN DE LÓGICA DE ANIVERSARIO ▲▲▲
 
   useEffect(() => {
     const init = async () => {
@@ -163,7 +151,6 @@ function HomePage({ user, onLogout, onOpenGallery }) {
         const daysArray = Object.keys(COORDS_MAP).map(key => {
           const idx = Number(key);
           const progress = initData.progress.find(p => p.day_index === idx);
-
           return {
             dayIndex: idx,
             unlocked: true,
@@ -174,12 +161,10 @@ function HomePage({ user, onLogout, onOpenGallery }) {
         });
 
         setDays(daysArray);
-
         const todayProgress = initData.progress.find(
           p => p.day_index === initData.today_day_index
         );
         setSceneCompleted(todayProgress?.scene_completed ?? false);
-
       } catch (err) {
         console.error(err);
         setError('No se pudo cargar la historia estelar.');
@@ -194,9 +179,7 @@ function HomePage({ user, onLogout, onOpenGallery }) {
     setSceneCompleted(true);
     const dayToFetch = finishedDayIndex ?? todayDayIndex;
     setDays(prev =>
-      prev.map(day =>
-        day.dayIndex === dayToFetch ? { ...day, unlocked: true } : day
-      )
+      prev.map(day => day.dayIndex === dayToFetch ? { ...day, unlocked: true } : day)
     );
     try {
       const letter = await letterService.getLetter(dayToFetch);
@@ -225,22 +208,13 @@ function HomePage({ user, onLogout, onOpenGallery }) {
     setCurrentLetter(null);
     if (closedLetterDayIndex !== undefined) {
       setDays(prev =>
-        prev.map(day =>
-          day.dayIndex === closedLetterDayIndex
-            ? { ...day, letterOpened: true }
-            : day
-        )
+        prev.map(day => day.dayIndex === closedLetterDayIndex ? { ...day, letterOpened: true } : day)
       );
     }
   };
 
-  if (showTimeline) {
-    return <TimelinePage onBack={() => setShowTimeline(false)} />;
-  }
-
-  if (showGaleria) {
-    return <GaleriaPage onBack={() => setShowGaleria(false)} />;
-  }
+  if (showTimeline) return <TimelinePage onBack={() => setShowTimeline(false)} />;
+  if (showGaleria) return <GaleriaPage onBack={() => setShowGaleria(false)} />;
 
   if (loading) {
     return (
@@ -260,47 +234,84 @@ function HomePage({ user, onLogout, onOpenGallery }) {
 
   return (
     <div className="home-wrapper" style={{ backgroundImage: `url(${summerScene})` }}>
+      
+      <style>{animationStyles}</style>
 
-      {/* ▼▼▼ MODAL DE ANIVERSARIO ▼▼▼ */}
-      {showAnniversary && (
-        <div className="anniversary-overlay">
-          <div className="anniversary-content">
-            <h1 className="anniversary-title">¡Feliz Aniversario, mi amor! ❤️</h1>
-            <h2 className="anniversary-subtitle">¡Hoy cumplimos 2 hermosos meses!</h2>
-            <p className="anniversary-text">
-              Gracias por cada instante mágico a tu lado.<br/>
-              Eres mi estrella favorita en todo este universo. ✨
+      {/* ▼▼▼ БРОНЕБОЙНОЕ ОКНО ЧЕРЕЗ ПОРТАЛ ▼▼▼ */}
+      {showAnniversary && createPortal(
+        <div style={{
+          position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+          backgroundColor: 'rgba(10, 5, 20, 0.85)', backdropFilter: 'blur(10px)',
+          display: 'flex', justifyContent: 'center', alignItems: 'center',
+          zIndex: 999999, margin: 0, padding: 0,
+          animation: 'fadeOverlay 1s ease-out forwards'
+        }}>
+          <div style={{
+            position: 'relative',
+            background: 'linear-gradient(145deg, rgba(25, 25, 35, 0.98), rgba(15, 10, 20, 0.98))',
+            border: '2px solid rgba(212, 175, 55, 0.6)', borderRadius: '20px',
+            padding: '40px 30px', maxWidth: '400px', width: '90%', textAlign: 'center',
+            boxShadow: '0 20px 50px rgba(0,0,0,0.9), 0 0 30px rgba(212,175,55,0.3)',
+            boxSizing: 'border-box', overflow: 'hidden',
+            animation: 'popCard 1s ease-out forwards'
+          }}>
+            <h1 style={{
+              color: '#E8C37D', fontSize: '2rem', margin: '0 0 10px 0',
+              fontFamily: 'serif', letterSpacing: '1px'
+            }}>
+              Feliz 2º Mes, mi amor
+            </h1>
+            <h2 style={{
+              color: '#fff', fontSize: '1.1rem', margin: '0 0 25px 0',
+              fontStyle: 'italic', fontWeight: 'normal'
+            }}>
+              Dos meses de magia a tu lado
+            </h2>
+            
+            <p style={{
+              color: '#ddd', lineHeight: '1.6', margin: '0 0 30px 0', fontSize: '1rem'
+            }}>
+              Cada instante contigo es el regalo más hermoso que me ha dado el universo.<br/><br/>
+              Gracias por ser mi estrella más brillante. Te amo.
             </p>
-            <button className="anniversary-close-btn" onClick={() => setShowAnniversary(false)}>
-              Te amo (Cerrar)
+            
+            <button 
+              onClick={() => setShowAnniversary(false)}
+              style={{
+                backgroundColor: 'transparent', border: '1px solid #E8C37D',
+                color: '#E8C37D', padding: '12px 35px', borderRadius: '30px',
+                cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '1px',
+                fontWeight: 'bold', position: 'relative', zIndex: 10
+              }}
+            >
+              Te adoro
             </button>
             
-            {/* Generación de corazones flotantes */}
-            <div className="floating-hearts">
-              {[...Array(12)].map((_, i) => (
+            {/* Частицы */}
+            {[...Array(15)].map((_, i) => {
+              const size = Math.random() * 5 + 2; 
+              return (
                 <span 
                   key={i} 
-                  className="floating-heart" 
                   style={{ 
-                    left: `${Math.random() * 90}%`, 
-                    animationDelay: `${Math.random() * 3}s`,
-                    fontSize: `${1 + Math.random()}rem`
+                    position: 'absolute', backgroundColor: '#E8C37D', borderRadius: '50%',
+                    width: `${size}px`, height: `${size}px`,
+                    left: `${Math.random() * 95}%`, bottom: `-20px`,
+                    animation: 'floatGold infinite linear',
+                    animationDuration: `${Math.random() * 3 + 2}s`,
+                    animationDelay: `${Math.random() * 2}s`,
+                    zIndex: 1, pointerEvents: 'none'
                   }}
-                >
-                  {i % 2 === 0 ? '❤️' : '✨'}
-                </span>
-              ))}
-            </div>
+                />
+              );
+            })}
           </div>
-        </div>
+        </div>,
+        document.body // Рендерит окно прямо в тег <body>, игнорируя поломки внутри <home-wrapper>
       )}
-      {/* ▲▲▲ FIN MODAL DE ANIVERSARIO ▲▲▲ */}
+      {/* ▲▲▲ КОНЕЦ ОКНА ▲▲▲ */}
 
-      <button
-        className="home-logout"
-        onClick={onLogout}
-        style={{ top: '20px', bottom: 'auto', left: 'auto', right: '20px' }}
-      >
+      <button className="home-logout" onClick={onLogout} style={{ top: '20px', bottom: 'auto', left: 'auto', right: '20px' }}>
         Salir
       </button>
 
@@ -308,26 +319,16 @@ function HomePage({ user, onLogout, onOpenGallery }) {
         Nuestro Álbum
       </button>
 
-      <button
-        className="timeline-btn-home"
-        onClick={() => setShowTimeline(true)}
-      >
+      <button className="timeline-btn-home" onClick={() => setShowTimeline(true)}>
         ✦ Línea del tiempo
       </button>
 
-      <button
-        className="galeria-btn-home"
-        onClick={() => setShowGaleria(true)}
-      >
+      <button className="galeria-btn-home" onClick={() => setShowGaleria(true)}>
         ◆ Galería de mi musa
       </button>
 
       <div className="home-sky-layer">
-        <StarMap
-          days={days}
-          todayDayIndex={todayDayIndex}
-          onDayClick={handleOpenDay}
-        />
+        <StarMap days={days} todayDayIndex={todayDayIndex} onDayClick={handleOpenDay} />
       </div>
 
       <header className="home-header-card">
@@ -342,10 +343,7 @@ function HomePage({ user, onLogout, onOpenGallery }) {
       <LoveCounterCard />
 
       {!sceneCompleted && (
-        <CatSceneModal
-          isOpen={!sceneCompleted}
-          onSceneCompleted={handleSceneCompleted}
-        />
+        <CatSceneModal isOpen={!sceneCompleted} onSceneCompleted={handleSceneCompleted} />
       )}
 
       {showLetterModal && currentLetter && (
