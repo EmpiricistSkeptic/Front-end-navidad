@@ -4031,3 +4031,42 @@ body {
    .timeline-btn-home { top: 75px  }
    .galeria-btn-home   { top: 125px }
 ───────────────────────────────────────────────────────── */
+
+/* =========================================
+   МОБИЛЬНАЯ АДАПТАЦИЯ КНОПОК В HOMEPAGE
+   (Этот код сработает только на экранах меньше 768px - телефонах)
+   ========================================= */
+@media (max-width: 768px) {
+  
+  /* 1. Первая кнопка - Nuestro Álbum */
+  .album-btn-home {
+    top: 15px !important;
+    left: 10px !important;
+    padding: 6px 12px !important;
+    font-size: 0.7rem !important; /* Уменьшаем шрифт */
+  }
+
+  /* 2. Вторая кнопка - Línea del tiempo */
+  .timeline-btn-home {
+    top: 50px !important; /* Прижали ближе к первой */
+    left: 10px !important;
+    padding: 6px 12px !important;
+    font-size: 0.7rem !important;
+  }
+
+  /* 3. Третья кнопка - Galería de mi musa (та самая, что всё закрывала) */
+  .galeria-btn-home {
+    top: 85px !important; /* Прижали ближе ко второй */
+    left: 10px !important;
+    padding: 6px 12px !important;
+    font-size: 0.7rem !important;
+  }
+
+  /* 4. Кнопка Salir (Справа) */
+  .home-logout {
+    top: 15px !important;
+    right: 10px !important;
+    padding: 6px 12px !important;
+    font-size: 0.7rem !important;
+  }
+}
