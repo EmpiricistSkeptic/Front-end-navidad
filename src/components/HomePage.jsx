@@ -27,7 +27,7 @@ const COORDS_MAP = {
   6: { x: 24, y: 45 },
   7: { x: 68, y: 62 },
   8: { x: 80, y: 50 },
-  // Письмо на 1 месяц:
+  // Письмо на 1 месяц (agregado por ti):
   30: { x: 85, y: 20 }
 };
 
@@ -128,11 +128,29 @@ function HomePage({ user, onLogout, onOpenGallery }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Стейт для Línea del tiempo
+  // Стейт для Línea del tiempo y Galería
   const [showTimeline, setShowTimeline] = useState(false);
-
-  // Стейт для Galería de mi musa
   const [showGaleria, setShowGaleria] = useState(false);
+
+  // ▼▼▼ NUEVO ESTADO PARA LA ANIMACIÓN DE ANIVERSARIO ▼▼▼
+  const [showAnniversary, setShowAnniversary] = useState(false);
+
+  // Verificar si es día 13
+  useEffect(() => {
+    const today = new Date();
+    // Si hoy es el día 13 del mes, mostramos la animación
+    if (today.getDate() === 13) {
+      setShowAnniversary(true);
+
+      // La animación dura 15 segundos y luego desaparece
+      const timer = setTimeout(() => {
+        setShowAnniversary(false);
+      }, 15000);
+
+      return () => clearTimeout(timer); // Limpieza del temporizador
+    }
+  }, []);
+  // ▲▲▲ FIN DE LÓGICA DE ANIVERSARIO ▲▲▲
 
   useEffect(() => {
     const init = async () => {
@@ -141,16 +159,13 @@ function HomePage({ user, onLogout, onOpenGallery }) {
         const initData = await storyService.initStory();
         setTodayDayIndex(initData.today_day_index);
 
-        // Берем все ключи (индексы дней) из нашего словаря координат
         const daysArray = Object.keys(COORDS_MAP).map(key => {
-          const idx = Number(key); // Object.keys возвращает строки, переводим в число
-          
-          // Ищем, есть ли у юзера прогресс по этому дню
+          const idx = Number(key);
           const progress = initData.progress.find(p => p.day_index === idx);
 
           return {
             dayIndex: idx,
-            unlocked: true, // Звезда доступна для клика
+            unlocked: true,
             letterOpened: progress?.letter_opened || false,
             x: COORDS_MAP[idx].x,
             y: COORDS_MAP[idx].y,
@@ -159,7 +174,6 @@ function HomePage({ user, onLogout, onOpenGallery }) {
 
         setDays(daysArray);
 
-        // Проверяем, пройдена ли сцена для сегодняшнего дня
         const todayProgress = initData.progress.find(
           p => p.day_index === initData.today_day_index
         );
@@ -219,17 +233,14 @@ function HomePage({ user, onLogout, onOpenGallery }) {
     }
   };
 
-  // ── Рендер Timeline ─────────────────────────────────────────
   if (showTimeline) {
     return <TimelinePage onBack={() => setShowTimeline(false)} />;
   }
 
-  // ── Рендер Galería de mi musa ──────────────────────────────
   if (showGaleria) {
     return <GaleriaPage onBack={() => setShowGaleria(false)} />;
   }
 
-  // ── Загрузка / ошибка ───────────────────────────────────────
   if (loading) {
     return (
       <div className="home-wrapper" style={{ backgroundImage: `url(${summerScene})` }}>
@@ -246,11 +257,44 @@ function HomePage({ user, onLogout, onOpenGallery }) {
     );
   }
 
-  // ── Главный рендер ──────────────────────────────────────────
   return (
     <div className="home-wrapper" style={{ backgroundImage: `url(${summerScene})` }}>
 
-      {/* Кнопка выхода */}
+      {/* ▼▼▼ MODAL DE ANIVERSARIO ▼▼▼ */}
+      {showAnniversary && (
+        <div className="anniversary-overlay">
+          <div className="anniversary-content">
+            <h1 className="anniversary-title">¡Feliz Aniversario, mi amor! ❤️</h1>
+            <h2 className="anniversary-subtitle">¡Hoy cumplimos 2 hermosos meses!</h2>
+            <p className="anniversary-text">
+              Gracias por cada instante mágico a tu lado.<br/>
+              Eres mi estrella favorita en todo este universo. ✨
+            </p>
+            <button className="anniversary-close-btn" onClick={() => setShowAnniversary(false)}>
+              Te amo (Cerrar)
+            </button>
+            
+            {/* Generación de corazones flotantes */}
+            <div className="floating-hearts">
+              {[...Array(12)].map((_, i) => (
+                <span 
+                  key={i} 
+                  className="floating-heart" 
+                  style={{ 
+                    left: `${Math.random() * 90}%`, 
+                    animationDelay: `${Math.random() * 3}s`,
+                    fontSize: `${1 + Math.random()}rem`
+                  }}
+                >
+                  {i % 2 === 0 ? '❤️' : '✨'}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+      {/* ▲▲▲ FIN MODAL DE ANIVERSARIO ▲▲▲ */}
+
       <button
         className="home-logout"
         onClick={onLogout}
@@ -259,12 +303,10 @@ function HomePage({ user, onLogout, onOpenGallery }) {
         Salir
       </button>
 
-      {/* Кнопка Альбом */}
       <button className="album-btn-home" onClick={onOpenGallery}>
         Nuestro Álbum
       </button>
 
-      {/* Кнопка Línea del tiempo */}
       <button
         className="timeline-btn-home"
         onClick={() => setShowTimeline(true)}
@@ -272,7 +314,6 @@ function HomePage({ user, onLogout, onOpenGallery }) {
         ✦ Línea del tiempo
       </button>
 
-      {/* Кнопка Galería de mi musa */}
       <button
         className="galeria-btn-home"
         onClick={() => setShowGaleria(true)}
@@ -297,7 +338,6 @@ function HomePage({ user, onLogout, onOpenGallery }) {
         </div>
       </header>
 
-      {/* Счётчик любви — левый нижний угол */}
       <LoveCounterCard />
 
       {!sceneCompleted && (

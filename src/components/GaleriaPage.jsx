@@ -470,7 +470,7 @@ function GaleriaPage({ onBack }) {
         <h1 className="gl-intro-titulo">
           El arte de
           <br />
-          <em>quererte</em>
+          <em>amarte</em>
         </h1>
         <div className="gl-intro-separador">
           <span /><span className="gl-intro-rombo">◆</span><span />

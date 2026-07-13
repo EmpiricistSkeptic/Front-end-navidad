@@ -560,6 +560,94 @@ body {
 }
 
 /* =========================================
+   ANIMACIÓN DE ANIVERSARIO (13 DE CADA MES)
+   ========================================= */
+.anniversary-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(15, 5, 20, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(8px);
+  animation: fadeIn 1s ease-in-out;
+}
+
+.anniversary-content {
+  position: relative;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(255, 94, 148, 0.2), rgba(160, 32, 240, 0.2));
+  padding: 3rem 2rem;
+  border-radius: 20px;
+  border: 2px solid rgba(255, 182, 193, 0.4);
+  box-shadow: 0 0 40px rgba(255, 105, 180, 0.5);
+  max-width: 90%;
+  overflow: hidden;
+}
+
+.anniversary-title {
+  font-size: 2.5rem;
+  color: #ffb6c1;
+  margin-bottom: 10px;
+  text-shadow: 0 0 15px rgba(255, 182, 193, 0.8);
+  animation: pulseText 2s infinite;
+}
+
+.anniversary-subtitle {
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.anniversary-text {
+  font-size: 1.1rem;
+  color: #f0f0f0;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.anniversary-close-btn {
+  background: transparent;
+  border: 1px solid #ffb6c1;
+  color: #ffb6c1;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+  z-index: 10;
+  position: relative;
+}
+
+.anniversary-close-btn:hover {
+  background: #ffb6c1;
+  color: #000;
+}
+
+/* Corazones flotantes */
+.floating-hearts {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.floating-heart {
+  position: absolute;
+  bottom: -20px;
+  font-size: 1.5rem;
+  animation: floatUp 4s ease-in infinite;
+  opacity: 0;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pulseText { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(0.8); opacity: 1; }
+  100% { transform: translateY(-300px) scale(1.2); opacity: 0; }
+}
+
+/* =========================================
    ЗВЁЗДЫ: ИКОНКА В НЕБЕ (Адаптировано)
    ========================================= */
 
