@@ -16,6 +16,40 @@ import photo2 from '../assets/tu1.jpg';
 const LOVE_START_DATE = new Date('2025-10-30T00:00:00');
 // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
+// ▼▼▼ CONFIG DEL ANIVERSARIO — cambia aquí el mes/fecha cuando lo necesites ▼▼▼
+// year/month/day definen el día exacto (mes es 1-12, no 0-11, para que sea fácil de leer).
+const ANNIVERSARY_CONFIG = {
+  year: 2026,
+  month: 8, // Agosto
+  day: 13,
+  monthNumber: 3, // "3º mes"
+};
+// ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
+function isAnniversaryToday(config, now = new Date()) {
+  return (
+    now.getFullYear() === config.year &&
+    now.getMonth() + 1 === config.month &&
+    now.getDate() === config.day
+  );
+}
+
+// Posiciones deterministas para las partículas doradas (evita recalcular con Math.random en cada render)
+const ANNIVERSARY_PARTICLES = [
+  { left: 8, delay: 0.2, duration: 7, size: 3 },
+  { left: 18, delay: 1.6, duration: 8.5, size: 2 },
+  { left: 27, delay: 0.9, duration: 6.5, size: 4 },
+  { left: 38, delay: 2.4, duration: 9, size: 2 },
+  { left: 49, delay: 0.4, duration: 7.5, size: 3 },
+  { left: 61, delay: 1.9, duration: 8, size: 2 },
+  { left: 71, delay: 1.1, duration: 6.8, size: 3 },
+  { left: 82, delay: 2.8, duration: 9.5, size: 2 },
+  { left: 91, delay: 0.7, duration: 7.2, size: 3 },
+  { left: 14, delay: 3.2, duration: 8.8, size: 2 },
+  { left: 55, delay: 3.6, duration: 7.8, size: 2 },
+  { left: 95, delay: 1.4, duration: 6.2, size: 3 },
+];
+
 // Словарь координат для звезд
 const COORDS_MAP = {
   0: { x: 30, y: 70 },
@@ -41,6 +75,43 @@ const animationStyles = `
     20% { opacity: 0.8; } 
     80% { opacity: 0.8; } 
     100% { transform: translateY(-150px); opacity: 0; } 
+  }
+
+  @keyframes annivOverlayFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes annivGlowPulse {
+    0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 0.85; transform: translate(-50%, -50%) scale(1.08); }
+  }
+  @keyframes annivCardRise {
+    from { opacity: 0; transform: translateY(28px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes annivFadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes annivHeartPulse {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.12); opacity: 1; }
+  }
+  @keyframes annivParticleDrift {
+    0% { transform: translateY(0); opacity: 0; }
+    12% { opacity: 0.7; }
+    88% { opacity: 0.55; }
+    100% { transform: translateY(-120vh); opacity: 0; }
+  }
+  @keyframes annivDividerGrow {
+    from { width: 0; opacity: 0; }
+    to { width: 56px; opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .anniv-overlay, .anniv-card, .anniv-fade-item, .anniv-heart, .anniv-particle, .anniv-glow, .anniv-divider-line {
+      animation: none !important;
+    }
   }
 `;
 
@@ -115,6 +186,254 @@ function LoveCounterCard() {
   );
 }
 
+// Popup de aniversario — cinematográfico, elegante, aislado de LoveCounterCard.
+function AnniversaryOverlay({ monthNumber, onClose }) {
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [onClose]);
+
+  return createPortal(
+    <div
+      className="anniv-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="anniv-heading"
+      aria-describedby="anniv-message"
+      style={{
+        position: 'fixed',
+        inset: 0,
+        width: '100vw',
+        height: '100dvh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 999999,
+        margin: 0,
+        padding: 'clamp(16px, 5vw, 32px)',
+        boxSizing: 'border-box',
+        overflow: 'hidden',
+        background:
+          'radial-gradient(ellipse at 50% 20%, rgba(120, 40, 70, 0.35), transparent 60%), ' +
+          'radial-gradient(ellipse at 15% 85%, rgba(90, 40, 120, 0.25), transparent 55%), ' +
+          'radial-gradient(ellipse at 85% 80%, rgba(60, 30, 90, 0.25), transparent 55%), ' +
+          'linear-gradient(180deg, #06040c 0%, #0b0714 45%, #0a0510 100%)',
+        animation: 'annivOverlayFade 0.9s ease-out forwards',
+      }}
+    >
+      {/* Halo atmosférico detrás de la tarjeta */}
+      <div
+        className="anniv-glow"
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          width: 'min(90vw, 520px)',
+          height: 'min(90vw, 520px)',
+          background:
+            'radial-gradient(circle, rgba(232, 195, 125, 0.18) 0%, rgba(150, 60, 100, 0.12) 45%, transparent 72%)',
+          filter: 'blur(20px)',
+          transform: 'translate(-50%, -50%)',
+          animation: 'annivGlowPulse 6s ease-in-out infinite',
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* Partículas doradas, deterministas y discretas */}
+      {ANNIVERSARY_PARTICLES.map((p, i) => (
+        <span
+          key={i}
+          className="anniv-particle"
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            bottom: '-10%',
+            left: `${p.left}%`,
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(232,195,125,0.9), rgba(232,195,125,0))',
+            boxShadow: '0 0 6px rgba(232,195,125,0.6)',
+            animation: `annivParticleDrift ${p.duration}s linear infinite`,
+            animationDelay: `${p.delay}s`,
+            pointerEvents: 'none',
+          }}
+        />
+      ))}
+
+      {/* Tarjeta principal */}
+      <div
+        className="anniv-card"
+        style={{
+          position: 'relative',
+          zIndex: 2,
+          width: 'min(92vw, 400px)',
+          maxHeight: '88dvh',
+          overflowY: 'auto',
+          background:
+            'linear-gradient(160deg, rgba(28, 20, 34, 0.82) 0%, rgba(16, 11, 22, 0.9) 100%)',
+          backdropFilter: 'blur(18px)',
+          WebkitBackdropFilter: 'blur(18px)',
+          border: '1px solid rgba(212, 175, 110, 0.35)',
+          borderRadius: '22px',
+          padding: 'clamp(28px, 7vw, 44px) clamp(20px, 6vw, 34px)',
+          textAlign: 'center',
+          boxShadow:
+            '0 30px 70px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.02) inset, 0 1px 0 rgba(255,255,255,0.06) inset',
+          animation: 'annivCardRise 1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both',
+          boxSizing: 'border-box',
+        }}
+      >
+        <div
+          className="anniv-fade-item"
+          style={{
+            fontSize: 'clamp(0.68rem, 2vw, 0.75rem)',
+            letterSpacing: '0.22em',
+            textTransform: 'uppercase',
+            color: 'rgba(232, 195, 125, 0.75)',
+            marginBottom: '14px',
+            animation: 'annivFadeUp 0.8s ease-out 0.5s both',
+          }}
+        >
+          ✦ Aniversario ✦
+        </div>
+
+        <h1
+          id="anniv-heading"
+          className="anniv-fade-item"
+          style={{
+            fontFamily: 'Georgia, "Times New Roman", serif',
+            color: '#F0DCA8',
+            fontSize: 'clamp(1.5rem, 6vw, 2.1rem)',
+            lineHeight: 1.25,
+            margin: '0 0 8px 0',
+            letterSpacing: '0.01em',
+            fontWeight: 400,
+            animation: 'annivFadeUp 0.8s ease-out 0.65s both',
+          }}
+        >
+          Feliz {monthNumber}º mes, mi amor
+        </h1>
+
+        <h2
+          className="anniv-fade-item"
+          style={{
+            fontFamily: 'Georgia, "Times New Roman", serif',
+            fontStyle: 'italic',
+            fontWeight: 400,
+            color: 'rgba(235, 225, 235, 0.85)',
+            fontSize: 'clamp(0.95rem, 3.4vw, 1.1rem)',
+            margin: '0 0 20px 0',
+            animation: 'annivFadeUp 0.8s ease-out 0.8s both',
+          }}
+        >
+          Tres meses de nosotros
+        </h2>
+
+        <div
+          className="anniv-fade-item anniv-divider"
+          aria-hidden="true"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '10px',
+            margin: '0 auto 20px auto',
+            animation: 'annivFadeUp 0.8s ease-out 0.95s both',
+          }}
+        >
+          <span
+            className="anniv-divider-line"
+            style={{
+              display: 'inline-block',
+              height: '1px',
+              width: '56px',
+              background:
+                'linear-gradient(90deg, transparent, rgba(212,175,110,0.7))',
+              animation: 'annivDividerGrow 1s ease-out 1.1s both',
+            }}
+          />
+          <span
+            className="anniv-heart"
+            style={{
+              color: 'rgba(212, 175, 110, 0.9)',
+              fontSize: '0.85rem',
+              display: 'inline-block',
+              animation: 'annivHeartPulse 2.6s ease-in-out infinite',
+            }}
+          >
+            ♥
+          </span>
+          <span
+            style={{
+              display: 'inline-block',
+              height: '1px',
+              width: '56px',
+              background:
+                'linear-gradient(90deg, rgba(212,175,110,0.7), transparent)',
+              animation: 'annivDividerGrow 1s ease-out 1.1s both',
+            }}
+          />
+        </div>
+
+        <p
+          id="anniv-message"
+          className="anniv-fade-item"
+          style={{
+            color: 'rgba(228, 220, 228, 0.88)',
+            fontSize: 'clamp(0.9rem, 3.2vw, 1rem)',
+            lineHeight: 1.7,
+            margin: '0 0 26px 0',
+            fontFamily: 'Georgia, "Times New Roman", serif',
+            animation: 'annivFadeUp 0.8s ease-out 1.1s both',
+          }}
+        >
+          Cada día contigo se siente como una pequeña historia que quiero seguir
+          escribiendo. Gracias por estos tres meses, por cada sonrisa, cada
+          palabra y cada momento que compartimos. Te amo, mi amor.
+        </p>
+
+        <button
+          onClick={onClose}
+          className="anniv-fade-item"
+          style={{
+            background: 'linear-gradient(180deg, rgba(212,175,110,0.12), rgba(212,175,110,0.04))',
+            border: '1px solid rgba(212, 175, 110, 0.55)',
+            color: '#F0DCA8',
+            padding: '13px 30px',
+            borderRadius: '999px',
+            cursor: 'pointer',
+            letterSpacing: '0.06em',
+            fontSize: 'clamp(0.8rem, 2.6vw, 0.88rem)',
+            fontFamily: 'Georgia, "Times New Roman", serif',
+            minHeight: '44px',
+            minWidth: '44px',
+            transition: 'background 0.35s ease, box-shadow 0.35s ease, transform 0.25s ease',
+            animation: 'annivFadeUp 0.8s ease-out 1.25s both',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background =
+              'linear-gradient(180deg, rgba(212,175,110,0.22), rgba(212,175,110,0.08))';
+            e.currentTarget.style.boxShadow = '0 0 22px rgba(212,175,110,0.25)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background =
+              'linear-gradient(180deg, rgba(212,175,110,0.12), rgba(212,175,110,0.04))';
+            e.currentTarget.style.boxShadow = 'none';
+          }}
+        >
+          Te adoro ❤️
+        </button>
+      </div>
+    </div>,
+    document.body
+  );
+}
+
 function HomePage({ user, onLogout, onOpenGallery }) {
   const [todayDayIndex, setTodayDayIndex] = useState(null);
   const [days, setDays] = useState([]);
@@ -129,15 +448,11 @@ function HomePage({ user, onLogout, onOpenGallery }) {
   // Стейт для анимации годовщины
   const [showAnniversary, setShowAnniversary] = useState(false);
 
+  // La fecha decide si hoy es el aniversario. No hay timeout: el cierre solo
+  // depende de la interacción del usuario y se resetea en cada recarga/apertura.
   useEffect(() => {
-    const today = new Date();
-    // Активируется каждое 13 число
-    if (today.getDate() === 13) {
+    if (isAnniversaryToday(ANNIVERSARY_CONFIG)) {
       setShowAnniversary(true);
-      const timer = setTimeout(() => {
-        setShowAnniversary(false);
-      }, 15000);
-      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -237,79 +552,12 @@ function HomePage({ user, onLogout, onOpenGallery }) {
       
       <style>{animationStyles}</style>
 
-      {/* ▼▼▼ БРОНЕБОЙНОЕ ОКНО ЧЕРЕЗ ПОРТАЛ ▼▼▼ */}
-      {showAnniversary && createPortal(
-        <div style={{
-          position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-          backgroundColor: 'rgba(10, 5, 20, 0.85)', backdropFilter: 'blur(10px)',
-          display: 'flex', justifyContent: 'center', alignItems: 'center',
-          zIndex: 999999, margin: 0, padding: 0,
-          animation: 'fadeOverlay 1s ease-out forwards'
-        }}>
-          <div style={{
-            position: 'relative',
-            background: 'linear-gradient(145deg, rgba(25, 25, 35, 0.98), rgba(15, 10, 20, 0.98))',
-            border: '2px solid rgba(212, 175, 55, 0.6)', borderRadius: '20px',
-            padding: '40px 30px', maxWidth: '400px', width: '90%', textAlign: 'center',
-            boxShadow: '0 20px 50px rgba(0,0,0,0.9), 0 0 30px rgba(212,175,55,0.3)',
-            boxSizing: 'border-box', overflow: 'hidden',
-            animation: 'popCard 1s ease-out forwards'
-          }}>
-            <h1 style={{
-              color: '#E8C37D', fontSize: '2rem', margin: '0 0 10px 0',
-              fontFamily: 'serif', letterSpacing: '1px'
-            }}>
-              Feliz 2º Mes, mi amor
-            </h1>
-            <h2 style={{
-              color: '#fff', fontSize: '1.1rem', margin: '0 0 25px 0',
-              fontStyle: 'italic', fontWeight: 'normal'
-            }}>
-              Dos meses de magia a tu lado
-            </h2>
-            
-            <p style={{
-              color: '#ddd', lineHeight: '1.6', margin: '0 0 30px 0', fontSize: '1rem'
-            }}>
-              Cada instante contigo es el regalo más hermoso que me ha dado el universo.<br/><br/>
-              Gracias por ser mi estrella más brillante. Te amo.
-            </p>
-            
-            <button 
-              onClick={() => setShowAnniversary(false)}
-              style={{
-                backgroundColor: 'transparent', border: '1px solid #E8C37D',
-                color: '#E8C37D', padding: '12px 35px', borderRadius: '30px',
-                cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '1px',
-                fontWeight: 'bold', position: 'relative', zIndex: 10
-              }}
-            >
-              Te adoro
-            </button>
-            
-            {/* Частицы */}
-            {[...Array(15)].map((_, i) => {
-              const size = Math.random() * 5 + 2; 
-              return (
-                <span 
-                  key={i} 
-                  style={{ 
-                    position: 'absolute', backgroundColor: '#E8C37D', borderRadius: '50%',
-                    width: `${size}px`, height: `${size}px`,
-                    left: `${Math.random() * 95}%`, bottom: `-20px`,
-                    animation: 'floatGold infinite linear',
-                    animationDuration: `${Math.random() * 3 + 2}s`,
-                    animationDelay: `${Math.random() * 2}s`,
-                    zIndex: 1, pointerEvents: 'none'
-                  }}
-                />
-              );
-            })}
-          </div>
-        </div>,
-        document.body // Рендерит окно прямо в тег <body>, игнорируя поломки внутри <home-wrapper>
+      {showAnniversary && (
+        <AnniversaryOverlay
+          monthNumber={ANNIVERSARY_CONFIG.monthNumber}
+          onClose={() => setShowAnniversary(false)}
+        />
       )}
-      {/* ▲▲▲ КОНЕЦ ОКНА ▲▲▲ */}
 
       <button className="home-logout" onClick={onLogout} style={{ top: '20px', bottom: 'auto', left: 'auto', right: '20px' }}>
         Salir
