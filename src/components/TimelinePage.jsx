@@ -10,6 +10,8 @@ import { useState } from 'react';
 import peque1 from '../assets/peque.jpg'
 import unmes from '../assets/unmes.jpg'
 import futb from '../assets/futb.jpg'
+import 2mes from '../assets/2mes.jpg'
+import venjun from '../assets/venjun.jpg'
 const MOMENTS = [
   {
     id: 0,
@@ -95,7 +97,7 @@ const MOMENTS = [
     date: '13 de Junio de 2026',
     shortDate: '13 Jun 2026',
     title: 'Un mes juntos',
-    body: 'Un mes puede parecer poco para el mundo, pero para mí significó el comienzo de toda una vida contigo. Ese día vimos *Your Name* juntos, compartimos risas, miradas a través de una pantalla y una conexión que iba mucho más allá de la distancia. Entre la ternura, las palabras llenas de amor y la pasión que solo nosotros entendemos, descubrí una vez más que cada instante contigo es especial. Fue nuestro día, un recuerdo que siempre llevaré en el corazón. Te amo. ❤️',
+    body: 'Un mes puede parecer poco para el mundo, pero para mí significó el comienzo de toda una vida contigo. Ese día vimos Your Name juntos, compartimos risas, miradas a través de una pantalla y una conexión que iba mucho más allá de la distancia. Entre la ternura, las palabras llenas de amor y la pasión que solo nosotros entendemos, descubrí una vez más que cada instante contigo es especial. Fue nuestro día, un recuerdo que siempre llevaré en el corazón. Te amo. ❤️',
     tags: ['1 mes', 'Your Name', 'videollamada', 'amor'],
     photo: unmes,
   },
@@ -113,6 +115,31 @@ const MOMENTS = [
 
   {
     id: 9,
+    icon: '♥',
+    color: 'rose',
+    date: '13 de Julio de 2026',
+    shortDate: '13 Jul 2026',
+    title: 'Dos meses juntos',
+    body: 'Dos meses pueden parecer poco para el mundo, pero para mí significan muchísimo. ❤️ Hemos compartido amor, risas, ternura y momentos que guardaré siempre en mi corazón. Y entre todos ellos, nunca olvidaré esa sorpresa inesperada que me diste, un detalle que hizo nuestro día aún más especial. Cada momento contigo me recuerda cuánto te amo y lo especial que eres para mí. Dos meses de nosotros, de amor y de seguir construyendo nuestra historia. Te amo muchísimo, mi amor. ❤️',
+    tags: ['2 meses', 'momento especial', 'videollamada', 'amor'],
+    photo: 2mes,
+  },
+
+  {
+    id: 10,
+    icon: '♥',
+    color: 'rose',
+    date: '18 de Julio de 2026',
+    shortDate: '18 Jul 2026',
+    title: 'Un momento nuestro',
+    body: 'El 18 de julio tuvimos uno de esos momentos que simplemente se quedan contigo. ❤️ Hubo mucha confianza, deseo y esa conexión que siento contigo de una forma que no puedo explicar. Me encantó verte dejarte llevar, confiar en mí, obedecerme como mi beuna niña y disfrutar de ese momento juntos. Fue intenso, íntimo y muy nuestro, con esa mezcla de pasión y ternura que solo nosotros tenemos. Sin duda, es uno de esos recuerdos que voy a guardar con una sonrisa. Te amo, mi niña buena. ❤️',
+    tags: ['momento íntimo', 'pasión', 'confianza', 'nosotros'],
+    photo: venjun,
+  },
+
+
+  {
+    id: 11,
     icon: '∞',
     color: 'gold-big',
     date: 'Hoy y siempre',
