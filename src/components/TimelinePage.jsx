@@ -10,8 +10,9 @@ import { useState } from 'react';
 import peque1 from '../assets/peque.jpg'
 import unmes from '../assets/unmes.jpg'
 import futb from '../assets/futb.jpg'
-import 2mes from '../assets/2mes.jpg'
+import dosmes from '../assets/dosmes.jpg'
 import venjun from '../assets/venjun.jpg'
+
 const MOMENTS = [
   {
     id: 0,
@@ -122,7 +123,7 @@ const MOMENTS = [
     title: 'Dos meses juntos',
     body: 'Dos meses pueden parecer poco para el mundo, pero para mí significan muchísimo. ❤️ Hemos compartido amor, risas, ternura y momentos que guardaré siempre en mi corazón. Y entre todos ellos, nunca olvidaré esa sorpresa inesperada que me diste, un detalle que hizo nuestro día aún más especial. Cada momento contigo me recuerda cuánto te amo y lo especial que eres para mí. Dos meses de nosotros, de amor y de seguir construyendo nuestra historia. Te amo muchísimo, mi amor. ❤️',
     tags: ['2 meses', 'momento especial', 'videollamada', 'amor'],
-    photo: 2mes,
+    photo: dosmes,
   },
 
   {
