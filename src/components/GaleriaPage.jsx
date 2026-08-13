@@ -11,6 +11,8 @@ import galeria3 from '../assets/galeria/galeria3.jpg';
 import galeria4 from '../assets/galeria/galeria4.jpg';
 import galeria5 from '../assets/galeria/galeria5.jpg';
 import galeria6 from '../assets/galeria/galeria6.jpg';
+import galeria7 from '../assets/galeria/galeria7.jpg';
+import galeria8 from '../assets/galeria/galeria8.jpg';
 
 // ВАЖНО: Добавлен импорт музыки! 
 // Убедись, что путь и расширение (.mp3, .wav) совпадают с твоим файлом.
@@ -168,6 +170,56 @@ const OBRAS = [
         },
     ],
     },
+  
+  {
+    id: 7,
+    src: galeria7,
+    titulo: 'Más bonita cuando no lo intenta',
+    año: '2026',
+    tecnica: 'Fotografía digital',
+    descripcion: 'Hay una belleza especial en los momentos en los que simplemente eres tú.',
+    puntos: [
+      {
+        x: 52,
+        y: 36,
+        titulo: 'Esa mirada',
+        texto:
+          'Me encanta esta foto porque aquí no estás intentando posar ni demostrar nada. Simplemente estás ahí, sonriendo, mirando hacia abajo, siendo tú. Y no sé cómo explicarlo, pero precisamente así es como me pareces más bonita. Hay algo en tu expresión que me transmite una ternura enorme y hace que quiera acercarme a ti y darte un beso.',
+      },
+      {
+        x: 28,
+        y: 54,
+        titulo: 'Cuando simplemente eres tú',
+        texto:
+          'Creo que esta es una de esas fotos que me gustan precisamente porque no parece que estés intentando verte bonita. Estás simplemente disfrutando tu momento, con esa sonrisa tranquila y tu forma tan natural de ser. Y quizá por eso me gusta tanto. Porque no necesito que hagas nada especial para verte hermosa. Me gustas así, cuando simplemente eres tú.',
+      },
+    ],
+  },
+  {
+    id: 8,
+    src: galeria8,
+    titulo: 'Mi niña buena',
+    año: '2026',
+    tecnica: 'Fotografía digital',
+    descripcion: 'Hay algo irresistible en verte así, mi niña buena, tan dulce y tan obediente conmigo.',
+    puntos: [
+    {
+    x: 52,
+    y: 36,
+    titulo: 'Esa sumisión',
+    texto:
+    'Hay algo en tu mirada que me encanta. Esa forma tuya de mirarme y escucharme cuando yo te doy órdenes, mi niña buena. Me gusta saber que confías en mí, que puedes relajarte conmigo y simplemente dejar que yo te guíe. Y sí, admito que verte así me parece increíblemente bonita.',
+    },
+    {
+    x: 28,
+    y: 54,
+    titulo: 'Tu obediencia',
+    texto:
+    'Creo que una de las cosas que más me gustan de nuestra relación es esa parte de ti que solo aparece conmigo. Esa pequeña sonrisa cuando sabes que estás siendo mi niña buena, esa confianza y esa manera tan dulce de hacer lo que te pido. No se trata solo de obedecerme; me encanta saber que lo haces porque confías en mí y porque disfrutas de nuestra conexión. Y eso te hace todavía más especial para mí.',
+    },
+    ],
+    },
+
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
