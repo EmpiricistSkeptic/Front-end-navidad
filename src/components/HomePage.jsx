@@ -21,7 +21,7 @@ const LOVE_START_DATE = new Date('2025-10-30T00:00:00');
 const ANNIVERSARY_CONFIG = {
   year: 2026,
   month: 8, // Agosto
-  day: 13,
+  day: 14,
   monthNumber: 3, // "3º mes"
 };
 // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
