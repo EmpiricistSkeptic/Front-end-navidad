@@ -122,8 +122,38 @@ const animationStyles = `
     background: none !important;
   }
 
+  /* Dock flotante: independiente del CSS externo, siempre visible en móvil.
+     Para añadir botones nuevos, solo agrega otro <button className="icon-btn-home"> dentro. */
+  .home-actions-dock {
+    position: fixed !important;
+    top: auto !important;
+    left: auto !important;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+    right: calc(16px + env(safe-area-inset-right, 0px)) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px;
+    z-index: 4000;
+    pointer-events: none;
+  }
+  .home-actions-dock > * {
+    pointer-events: auto;
+  }
+  @media (max-width: 480px) {
+    .home-actions-dock {
+      bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+      right: calc(12px + env(safe-area-inset-right, 0px)) !important;
+      gap: 10px;
+    }
+  }
+
   .icon-btn-home {
-    position: relative;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -140,7 +170,18 @@ const animationStyles = `
     color: #F0DCA8;
     line-height: 0;
     cursor: pointer;
+    flex-shrink: 0;
     transition: transform 0.25s ease, box-shadow 0.35s ease, background 0.35s ease, border-color 0.35s ease;
+  }
+  @media (max-width: 480px) {
+    .icon-btn-home {
+      width: 48px;
+      height: 48px;
+    }
+    .icon-btn-home svg {
+      width: 19px;
+      height: 19px;
+    }
   }
   .icon-btn-home svg {
     width: 22px;
@@ -611,43 +652,48 @@ function HomePage({ user, onLogout, onOpenGallery }) {
         Salir
       </button>
 
-      <button
-        className="album-btn-home icon-btn-home"
-        onClick={onOpenGallery}
-        aria-label="Nuestro Álbum"
-        title="Nuestro Álbum"
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M4 8.2h3l1.4-2h7.2l1.4 2h3a1 1 0 0 1 1 1V18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.2a1 1 0 0 1 1-1z" />
-          <circle cx="12" cy="13" r="3.3" />
-        </svg>
-      </button>
+      <div className="home-actions-dock">
+        <button
+          className="album-btn-home icon-btn-home"
+          onClick={onOpenGallery}
+          aria-label="Nuestro Álbum"
+          title="Nuestro Álbum"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 8.2h3l1.4-2h7.2l1.4 2h3a1 1 0 0 1 1 1V18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.2a1 1 0 0 1 1-1z" />
+            <circle cx="12" cy="13" r="3.3" />
+          </svg>
+        </button>
 
-      <button
-        className="timeline-btn-home icon-btn-home"
-        onClick={() => setShowTimeline(true)}
-        aria-label="Línea del tiempo"
-        title="Línea del tiempo"
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="8.5" />
-          <path d="M12 7.5V12l3 2" />
-        </svg>
-      </button>
+        <button
+          className="timeline-btn-home icon-btn-home"
+          onClick={() => setShowTimeline(true)}
+          aria-label="Línea del tiempo"
+          title="Línea del tiempo"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="8.5" />
+            <path d="M12 7.5V12l3 2" />
+          </svg>
+        </button>
 
-      <button
-        className="galeria-btn-home icon-btn-home"
-        onClick={() => setShowGaleria(true)}
-        aria-label="Galería de mi musa"
-        title="Galería de mi musa"
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="4" y="4" width="12" height="12" rx="1.5" opacity="0.55" />
-          <rect x="8" y="8" width="12" height="12" rx="1.5" />
-          <circle cx="11.6" cy="11.6" r="1" fill="currentColor" stroke="none" />
-          <path d="M8.6 17.5l2.3-2.6 2 1.7 2.6-3 2.1 2.9" />
-        </svg>
-      </button>
+        <button
+          className="galeria-btn-home icon-btn-home"
+          onClick={() => setShowGaleria(true)}
+          aria-label="Galería de mi musa"
+          title="Galería de mi musa"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="4" y="4" width="12" height="12" rx="1.5" opacity="0.55" />
+            <rect x="8" y="8" width="12" height="12" rx="1.5" />
+            <circle cx="11.6" cy="11.6" r="1" fill="currentColor" stroke="none" />
+            <path d="M8.6 17.5l2.3-2.6 2 1.7 2.6-3 2.1 2.9" />
+          </svg>
+        </button>
+
+        {/* Para añadir otro botón en el futuro, solo copia el patrón de arriba
+            dentro de este mismo div: un <button className="icon-btn-home"> con su SVG. */}
+      </div>
 
       <div className="home-sky-layer">
         <StarMap days={days} todayDayIndex={todayDayIndex} onDayClick={handleOpenDay} />
