@@ -114,30 +114,52 @@ const animationStyles = `
     }
   }
 
+  /* Reset por si estas clases ya traían un icono/fondo desde otro CSS (evita duplicados) */
+  .album-btn-home::before, .album-btn-home::after,
+  .timeline-btn-home::before, .timeline-btn-home::after,
+  .galeria-btn-home::before, .galeria-btn-home::after {
+    content: none !important;
+    background: none !important;
+  }
+
   .icon-btn-home {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 52px;
-    height: 52px;
+    width: 54px;
+    height: 54px;
+    padding: 0;
     border-radius: 50%;
     border: 1px solid rgba(212, 175, 110, 0.45);
-    background: linear-gradient(160deg, rgba(28, 20, 34, 0.75) 0%, rgba(16, 11, 22, 0.85) 100%);
+    background: linear-gradient(160deg, rgba(28, 20, 34, 0.78) 0%, rgba(16, 11, 22, 0.9) 100%);
+    background-image: none !important;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.03) inset;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.04) inset;
     color: #F0DCA8;
-    font-size: 1.3rem;
+    line-height: 0;
     cursor: pointer;
-    transition: transform 0.25s ease, box-shadow 0.35s ease, background 0.35s ease;
+    transition: transform 0.25s ease, box-shadow 0.35s ease, background 0.35s ease, border-color 0.35s ease;
+  }
+  .icon-btn-home svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+    flex-shrink: 0;
   }
   .icon-btn-home:hover {
-    transform: translateY(-2px) scale(1.06);
-    box-shadow: 0 12px 26px rgba(0,0,0,0.45), 0 0 18px rgba(212,175,110,0.35);
-    background: linear-gradient(160deg, rgba(38, 27, 46, 0.85) 0%, rgba(20, 14, 28, 0.92) 100%);
+    transform: translateY(-2px) scale(1.07);
+    border-color: rgba(232, 205, 150, 0.75);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.45), 0 0 20px rgba(212,175,110,0.4);
+    background: linear-gradient(160deg, rgba(40, 28, 48, 0.88) 0%, rgba(20, 14, 28, 0.95) 100%);
   }
   .icon-btn-home:active {
-    transform: translateY(0) scale(0.97);
+    transform: translateY(0) scale(0.96);
+  }
+  .icon-btn-home:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(212,175,110,0.35), 0 8px 20px rgba(0,0,0,0.35);
   }
 `;
 
@@ -595,7 +617,10 @@ function HomePage({ user, onLogout, onOpenGallery }) {
         aria-label="Nuestro Álbum"
         title="Nuestro Álbum"
       >
-        📷
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 8.2h3l1.4-2h7.2l1.4 2h3a1 1 0 0 1 1 1V18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.2a1 1 0 0 1 1-1z" />
+          <circle cx="12" cy="13" r="3.3" />
+        </svg>
       </button>
 
       <button
@@ -604,7 +629,10 @@ function HomePage({ user, onLogout, onOpenGallery }) {
         aria-label="Línea del tiempo"
         title="Línea del tiempo"
       >
-        ✦
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="8.5" />
+          <path d="M12 7.5V12l3 2" />
+        </svg>
       </button>
 
       <button
@@ -613,7 +641,12 @@ function HomePage({ user, onLogout, onOpenGallery }) {
         aria-label="Galería de mi musa"
         title="Galería de mi musa"
       >
-        ◆
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="4" y="4" width="12" height="12" rx="1.5" opacity="0.55" />
+          <rect x="8" y="8" width="12" height="12" rx="1.5" />
+          <circle cx="11.6" cy="11.6" r="1" fill="currentColor" stroke="none" />
+          <path d="M8.6 17.5l2.3-2.6 2 1.7 2.6-3 2.1 2.9" />
+        </svg>
       </button>
 
       <div className="home-sky-layer">
