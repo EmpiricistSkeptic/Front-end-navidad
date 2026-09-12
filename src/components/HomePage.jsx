@@ -6,7 +6,7 @@ import LetterModal from './LetterModal.jsx';
 
 import storyService from '../services/story.service';
 import letterService from '../services/letter.service';
-import summerScene from '../assets/summer-scene.png';
+import autumnScene from '../assets/autumn-scene.png';
 import TimelinePage from './TimelinePage.jsx';
 import GaleriaPage from './GaleriaPage.jsx';
 
@@ -66,7 +66,7 @@ const COORDS_MAP = {
   60: { x: 15, y: 25 }
 };
 
-// Минимальный CSS только для анимаций (не для дизайна)
+// Минимальный CSS только для анимаций и для новых иконок-кнопок
 const animationStyles = `
   @keyframes fadeOverlay { from { opacity: 0; } to { opacity: 1; } }
   @keyframes popCard { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
@@ -112,6 +112,32 @@ const animationStyles = `
     .anniv-overlay, .anniv-card, .anniv-fade-item, .anniv-heart, .anniv-particle, .anniv-glow, .anniv-divider-line {
       animation: none !important;
     }
+  }
+
+  .icon-btn-home {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid rgba(212, 175, 110, 0.45);
+    background: linear-gradient(160deg, rgba(28, 20, 34, 0.75) 0%, rgba(16, 11, 22, 0.85) 100%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.03) inset;
+    color: #F0DCA8;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.35s ease, background 0.35s ease;
+  }
+  .icon-btn-home:hover {
+    transform: translateY(-2px) scale(1.06);
+    box-shadow: 0 12px 26px rgba(0,0,0,0.45), 0 0 18px rgba(212,175,110,0.35);
+    background: linear-gradient(160deg, rgba(38, 27, 46, 0.85) 0%, rgba(20, 14, 28, 0.92) 100%);
+  }
+  .icon-btn-home:active {
+    transform: translateY(0) scale(0.97);
   }
 `;
 
@@ -533,7 +559,7 @@ function HomePage({ user, onLogout, onOpenGallery }) {
 
   if (loading) {
     return (
-      <div className="home-wrapper" style={{ backgroundImage: `url(${summerScene})` }}>
+      <div className="home-wrapper" style={{ backgroundImage: `url(${autumnScene})` }}>
         <div className="loading-container">✨ Cargando estrellas...</div>
       </div>
     );
@@ -541,15 +567,15 @@ function HomePage({ user, onLogout, onOpenGallery }) {
 
   if (error) {
     return (
-      <div className="home-wrapper" style={{ backgroundImage: `url(${summerScene})` }}>
+      <div className="home-wrapper" style={{ backgroundImage: `url(${autumnScene})` }}>
         <div className="error-container">{error}</div>
       </div>
     );
   }
 
   return (
-    <div className="home-wrapper" style={{ backgroundImage: `url(${summerScene})` }}>
-      
+    <div className="home-wrapper" style={{ backgroundImage: `url(${autumnScene})` }}>
+
       <style>{animationStyles}</style>
 
       {showAnniversary && (
@@ -563,30 +589,36 @@ function HomePage({ user, onLogout, onOpenGallery }) {
         Salir
       </button>
 
-      <button className="album-btn-home" onClick={onOpenGallery}>
-        Nuestro Álbum
+      <button
+        className="album-btn-home icon-btn-home"
+        onClick={onOpenGallery}
+        aria-label="Nuestro Álbum"
+        title="Nuestro Álbum"
+      >
+        📷
       </button>
 
-      <button className="timeline-btn-home" onClick={() => setShowTimeline(true)}>
-        ✦ Línea del tiempo
+      <button
+        className="timeline-btn-home icon-btn-home"
+        onClick={() => setShowTimeline(true)}
+        aria-label="Línea del tiempo"
+        title="Línea del tiempo"
+      >
+        ✦
       </button>
 
-      <button className="galeria-btn-home" onClick={() => setShowGaleria(true)}>
-        ◆ Galería de mi musa
+      <button
+        className="galeria-btn-home icon-btn-home"
+        onClick={() => setShowGaleria(true)}
+        aria-label="Galería de mi musa"
+        title="Galería de mi musa"
+      >
+        ◆
       </button>
 
       <div className="home-sky-layer">
         <StarMap days={days} todayDayIndex={todayDayIndex} onDayClick={handleOpenDay} />
       </div>
-
-      <header className="home-header-card">
-        <div className="home-greeting">
-          ¡Hola, {user.username || 'princesa'}!
-        </div>
-        <div className="home-subtitle">
-          Día de la historia: <strong>{todayDayIndex}</strong>
-        </div>
-      </header>
 
       <LoveCounterCard />
 
