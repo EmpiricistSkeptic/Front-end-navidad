@@ -524,6 +524,7 @@ function AnniversaryOverlay({ monthNumber, onClose }) {
 }
 
 function HomePage({ user, onLogout, onOpenGallery }) {
+  const navigate = useNavigate();
   const [todayDayIndex, setTodayDayIndex] = useState(null);
   const [days, setDays] = useState([]);
   const [sceneCompleted, setSceneCompleted] = useState(false);
