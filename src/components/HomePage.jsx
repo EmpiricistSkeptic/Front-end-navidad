@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom'; // НОВЫЙ ИМПОРТ ДЛЯ ИДЕАЛЬНОГО ОКНА
+import { useNavigate } from 'react-router-dom';
 import StarMap from './StarMap.jsx';
 import CatSceneModal from './CatSceneModal.jsx';
 import LetterModal from './LetterModal.jsx';
