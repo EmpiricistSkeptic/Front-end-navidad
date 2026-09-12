@@ -655,6 +655,68 @@ function HomePage({ user, onLogout, onOpenGallery }) {
 
       <div className="home-actions-dock">
         <button
+          className="universe-btn-home icon-btn-home"
+          onClick={() => navigate('/love-universe')}
+          aria-label="Nuestra galaxia"
+          title="Nuestra galaxia"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            {/* Центральная звезда */}
+            <circle
+              cx="12"
+              cy="12"
+              r="2.2"
+              fill="currentColor"
+              stroke="none"
+            />
+
+            {/* Орбита */}
+            <ellipse
+              cx="12"
+              cy="12"
+              rx="8.8"
+              ry="3.8"
+              transform="rotate(-28 12 12)"
+            />
+
+            {/* Вторая орбита */}
+            <ellipse
+              cx="12"
+              cy="12"
+              rx="7.2"
+              ry="3"
+              transform="rotate(42 12 12)"
+              opacity="0.5"
+            />
+
+            {/* Маленькая планета */}
+            <circle
+              cx="18.7"
+              cy="8.5"
+              r="1.05"
+              fill="currentColor"
+              stroke="none"
+            />
+
+            {/* Маленькая звезда */}
+            <path
+              d="M5.2 5.2l.45 1.2 1.2.45-1.2.45-.45 1.2-.45-1.2-1.2-.45 1.2-.45.45-1.2z"
+              fill="currentColor"
+              stroke="none"
+              opacity="0.75"
+            />
+          </svg>
+        </button>
+
+
+        <button
           className="album-btn-home icon-btn-home"
           onClick={onOpenGallery}
           aria-label="Nuestro Álbum"
