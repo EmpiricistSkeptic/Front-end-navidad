@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom'; // НОВЫЙ ИМПОРТ ДЛЯ ИДЕАЛЬНОГО ОКНА
-import { useNavigate } from 'react-router-dom';
 import StarMap from './StarMap.jsx';
 import CatSceneModal from './CatSceneModal.jsx';
 import LetterModal from './LetterModal.jsx';
@@ -118,7 +117,8 @@ const animationStyles = `
   /* Reset por si estas clases ya traían un icono/fondo desde otro CSS (evita duplicados) */
   .album-btn-home::before, .album-btn-home::after,
   .timeline-btn-home::before, .timeline-btn-home::after,
-  .galeria-btn-home::before, .galeria-btn-home::after {
+  .galeria-btn-home::before, .galeria-btn-home::after,
+  .universe-btn-home::before, .universe-btn-home::after {
     content: none !important;
     background: none !important;
   }
@@ -524,8 +524,7 @@ function AnniversaryOverlay({ monthNumber, onClose }) {
   );
 }
 
-function HomePage({ user, onLogout, onOpenGallery }) {
-  const navigate = useNavigate();
+function HomePage({ user, onLogout, onOpenGallery, onOpenUniverse }) {
   const [todayDayIndex, setTodayDayIndex] = useState(null);
   const [days, setDays] = useState([]);
   const [sceneCompleted, setSceneCompleted] = useState(false);
@@ -657,7 +656,7 @@ function HomePage({ user, onLogout, onOpenGallery }) {
       <div className="home-actions-dock">
         <button
           className="universe-btn-home icon-btn-home"
-          onClick={() => navigate('/love-universe')}
+          onClick={onOpenUniverse}
           aria-label="Nuestra galaxia"
           title="Nuestra galaxia"
         >

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
 import UniverseIntro from './UniverseIntro.jsx';
 import SpaceFlight from './SpaceFlight.jsx';
@@ -305,9 +304,7 @@ function createCenterGlow() {
   return sprite;
 }
 
-export default function LoveUniverse() {
-  const navigate = useNavigate();
-
+export default function LoveUniverse({ onBack }) {
   const containerRef = useRef(null);
   const rendererRef = useRef(null);
   const animationFrameRef = useRef(null);
@@ -826,7 +823,7 @@ export default function LoveUniverse() {
       {stage === 'intro' && (
         <UniverseIntro
           onEnter={handleEnter}
-          onBack={() => navigate('/')}
+          onBack={onBack}
         />
       )}
 
@@ -850,7 +847,7 @@ export default function LoveUniverse() {
             <button
               type="button"
               className="love-universe-back"
-              onClick={() => navigate('/')}
+              onClick={onBack}
             >
               ← Назад
             </button>
