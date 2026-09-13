@@ -1358,7 +1358,7 @@ export default function LoveUniverse({ onBack }) {
 
     const title =
       createTextSprite(
-        'TE AMO ❤',
+        'TE AMO INMENSAMENTE ❤',
         {
           fontSize: 120,
           color: '#ff438f',
