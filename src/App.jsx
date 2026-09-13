@@ -2,7 +2,7 @@ import { useState } from 'react';
 import AuthScreen from './components/AuthScreen.jsx';
 import HomePage from './components/HomePage.jsx';
 import MemoryAlbum from './components/MemoryAlbum.jsx'; // Импортируем новый компонент
-import LoveUniverse from './components/LoveUniverse.jsx'; // Nueva página "galaxia"
+import LoveUniverse from './components/Love/LoveUniverse.jsx'; // Nueva página "galaxia"
 
 function App() {
   const [user, setUser] = useState(() => {
