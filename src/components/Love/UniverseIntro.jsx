@@ -38,15 +38,15 @@ export default function UniverseIntro({
         </div>
 
         <h1>
-          Нажми, чтобы
+          Haz clic para
           <br />
-          попасть в свою вселенную
+          entrar en tu universo
         </h1>
 
         <p>
-          Там, где есть только мы,
+          Donde solo estamos nosotros,
           <br />
-          наши звёзды и немного бесконечности.
+          nuestras estrellas y un poco de infinito.
         </p>
 
         <button
@@ -54,7 +54,7 @@ export default function UniverseIntro({
           className="universe-intro-enter"
           onClick={onEnter}
         >
-          <span>Войти во вселенную</span>
+          <span>Entrar al universo</span>
           <span className="universe-intro-arrow">
             →
           </span>
@@ -65,7 +65,7 @@ export default function UniverseIntro({
           className="universe-intro-back"
           onClick={onBack}
         >
-          ← Вернуться
+          ← Regresar
         </button>
       </div>
     </div>

@@ -15,6 +15,33 @@
     sans-serif;
 }
 
+/* =========================================================
+   STAGE TRANSITIONS
+   Cada etapa (intro / vuelo / universo) aparece con un
+   fundido suave, para que el paso entre pantallas se sienta
+   cuidado en vez de abrupto.
+   ========================================================= */
+
+.universe-intro,
+.space-flight,
+.love-universe-stage {
+  animation: stageFadeIn 0.7s ease both;
+}
+
+@keyframes stageFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.love-universe-stage {
+  position: absolute;
+  inset: 0;
+}
+
 .love-universe-canvas {
   position: absolute;
   inset: 0;
@@ -26,6 +53,21 @@
   display: block;
   width: 100%;
   height: 100%;
+}
+
+/* Viñeta cinematográfica sutil sobre la escena 3D: concentra
+   la mirada en el centro y da profundidad sin tapar nada. */
+.love-universe-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 52%,
+      rgba(1, 0, 6, 0.42) 100%
+    );
 }
 
 .love-universe-ui {
@@ -45,9 +87,12 @@
   position: absolute;
   top: 24px;
   left: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   min-width: 110px;
   height: 42px;
-  padding: 0 18px;
+  padding: 0 18px 0 15px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 999px;
   background:
@@ -60,15 +105,23 @@
   transition:
     transform 0.2s ease,
     background 0.2s ease,
-    border-color 0.2s ease;
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.love-universe-back svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
 }
 
 .love-universe-back:hover {
-  transform: translateY(-1px);
+  transform: translateY(-1px) translateX(-2px);
   background:
     rgba(255, 70, 180, 0.12);
   border-color:
     rgba(255, 120, 210, 0.3);
+  box-shadow: 0 8px 22px rgba(255, 90, 190, 0.16);
 }
 
 .love-universe-hint {
@@ -76,18 +129,53 @@
   bottom: 25px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 20px;
   border-radius: 999px;
   background:
     rgba(7, 4, 18, 0.58);
   border: 1px solid rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  color: rgba(255, 240, 255, 0.6);
+  color: rgba(255, 240, 255, 0.68);
   font-size: 12px;
   line-height: 1.6;
   text-align: center;
   white-space: nowrap;
+  animation: hintFadeIn 0.6s ease 0.3s both;
+}
+
+@keyframes hintFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.love-universe-hint-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.love-universe-hint-item svg {
+  width: 14px;
+  height: 14px;
+  color: rgba(255, 170, 222, 0.8);
+  flex-shrink: 0;
+}
+
+.love-universe-hint-divider {
+  width: 1px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.18);
+  flex-shrink: 0;
 }
 
 .love-universe-help {
@@ -105,15 +193,31 @@
   font-size: 16px;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.love-universe-help:hover {
+  transform: translateY(-1px) scale(1.06);
+  background: rgba(255, 70, 180, 0.16);
+  border-color: rgba(255, 130, 214, 0.4);
+  box-shadow: 0 0 18px rgba(255, 90, 190, 0.35);
 }
 
 .love-universe-reset {
   position: absolute;
   right: 22px;
   top: 22px;
-  min-width: 116px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 150px;
   height: 40px;
-  padding: 0 14px;
+  padding: 0 16px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 999px;
   background:
@@ -121,17 +225,26 @@
   color: rgba(255, 255, 255, 0.72);
   cursor: pointer;
   font-size: 12px;
+  font-family: inherit;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   transition:
     background 0.2s ease,
-    transform 0.2s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.love-universe-reset svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
 }
 
 .love-universe-reset:hover {
   background:
     rgba(255, 75, 180, 0.12);
   transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(255, 90, 190, 0.15);
 }
 
 /* =========================================================
@@ -335,6 +448,8 @@
 }
 
 .universe-intro-enter {
+  position: relative;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -362,6 +477,28 @@
     box-shadow 0.22s ease;
 }
 
+.universe-intro-enter::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: left 0.65s ease;
+  pointer-events: none;
+}
+
+.universe-intro-enter:hover::after {
+  left: 130%;
+}
+
 .universe-intro-enter:hover {
   transform:
     translateY(-2px)
@@ -373,6 +510,11 @@
 
 .universe-intro-arrow {
   font-size: 19px;
+  transition: transform 0.25s ease;
+}
+
+.universe-intro-enter:hover .universe-intro-arrow {
+  transform: translateX(3px);
 }
 
 .universe-intro-back {
@@ -383,6 +525,7 @@
   color: rgba(255, 255, 255, 0.38);
   cursor: pointer;
   font-size: 12px;
+  transition: color 0.2s ease;
 }
 
 .universe-intro-back:hover {
@@ -751,14 +894,14 @@
     left: 14px;
     min-width: 92px;
     height: 38px;
-    padding: 0 13px;
+    padding: 0 13px 0 11px;
     font-size: 12px;
   }
 
   .love-universe-reset {
     top: 14px;
     right: 14px;
-    min-width: 96px;
+    min-width: 128px;
     height: 38px;
     font-size: 11px;
   }
@@ -770,10 +913,11 @@
 
   .love-universe-hint {
     bottom: 17px;
-    max-width: calc(100vw - 110px);
-    padding: 8px 12px;
+    max-width: calc(100vw - 40px);
+    padding: 8px 14px;
     white-space: normal;
     font-size: 10px;
+    gap: 10px;
   }
 
   .universe-intro-card {
@@ -803,10 +947,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .universe-intro,
+  .space-flight,
+  .love-universe-stage,
+  .love-universe-hint,
   .intro-star,
   .universe-intro-glow,
   .universe-intro-heart,
   .universe-intro-card,
+  .universe-intro-enter::after,
   .space-flight-stars,
   .flight-star,
   .space-flight-core,

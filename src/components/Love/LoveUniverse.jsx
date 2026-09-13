@@ -1385,8 +1385,9 @@ function createResetButton(
   button.type =
     'button';
 
-  button.textContent =
-    'Сбросить вид';
+  button.innerHTML =
+    '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>' +
+    '<span>Restablecer vista</span>';
 
   button.addEventListener(
     'click',
@@ -2432,11 +2433,13 @@ export default function LoveUniverse({
       )}
 
       {stage === 'universe' && (
-        <>
+        <div className="love-universe-stage">
           <div
             ref={containerRef}
             className="love-universe-canvas"
           />
+
+          <div className="love-universe-vignette" aria-hidden="true" />
 
           <div className="love-universe-ui">
             <button
@@ -2444,20 +2447,28 @@ export default function LoveUniverse({
               className="love-universe-back"
               onClick={onBack}
             >
-              ← Назад
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+              Volver
             </button>
 
             {showControls && (
               <div className="love-universe-hint">
-                <div>
-                  Перетаскивание —
-                  вращение
-                </div>
-
-                <div>
-                  Колесо —
-                  приближение
-                </div>
+                <span className="love-universe-hint-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2v20M2 12h20M5 9l-3 3 3 3M19 9l3 3-3 3M9 5l3-3 3 3M9 19l3 3 3-3" />
+                  </svg>
+                  Arrastra para girar
+                </span>
+                <span className="love-universe-hint-divider" aria-hidden="true" />
+                <span className="love-universe-hint-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="7" y="3" width="10" height="18" rx="5" />
+                    <path d="M12 7v4" />
+                  </svg>
+                  Desplaza para acercar
+                </span>
               </div>
             )}
 
@@ -2465,17 +2476,14 @@ export default function LoveUniverse({
               type="button"
               className="love-universe-help"
               onClick={() => {
-                setShowControls(
-                  (value) =>
-                    !value
-                );
+                setShowControls((value) => !value);
               }}
-              aria-label="Показать управление"
+              aria-label="Mostrar controles"
             >
               ?
             </button>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
