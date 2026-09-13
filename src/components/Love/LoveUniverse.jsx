@@ -819,17 +819,9 @@ function createHeartSparks() {
    TEXT SPRITES
    ========================================================= */
 
-function createTextSprite(
-  text,
-  scale = 1
-) {
-  const canvas =
-    document.createElement(
-      'canvas'
-    );
-
-  const context =
-    canvas.getContext('2d');
+function createTextSprite(text, scale = 1) {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
 
   const width = 1600;
   const height = 240;
@@ -837,27 +829,16 @@ function createTextSprite(
   canvas.width = width;
   canvas.height = height;
 
-  context.clearRect(
-    0,
-    0,
-    width,
-    height
-  );
+  context.clearRect(0, 0, width, height);
 
-  const cx =
-    width / 2;
-  const cy =
-    height / 2;
+  const cx = width / 2;
+  const cy = height / 2;
+  const boxWidth = width - 90;
+  const boxHeight = 126;
+  const radius = 63;
 
-  const boxWidth =
-    width - 90;
-  const boxHeight =
-    118;
-
-  const radius = 59;
-
+  // 1. Форма плашки
   context.beginPath();
-
   context.roundRect(
     cx - boxWidth / 2,
     cy - boxHeight / 2,
@@ -866,122 +847,54 @@ function createTextSprite(
     radius
   );
 
-  const background =
-    context.createLinearGradient(
-      0,
-      0,
-      width,
-      height
-    );
-
-  background.addColorStop(
-    0,
-    'rgba(18, 7, 29, 0.92)'
-  );
-
-  background.addColorStop(
-    0.5,
-    'rgba(34, 10, 41, 0.84)'
-  );
-
-  background.addColorStop(
-    1,
-    'rgba(12, 7, 24, 0.92)'
-  );
-
-  context.fillStyle =
-    background;
-
+  // 2. Глубокий, плотный космический фон (не пропускает фоновую рябь)
+  const background = context.createLinearGradient(0, 0, width, height);
+  background.addColorStop(0, 'rgba(12, 6, 22, 0.96)');
+  background.addColorStop(0.5, 'rgba(26, 9, 36, 0.94)');
+  background.addColorStop(1, 'rgba(10, 5, 20, 0.96)');
+  context.fillStyle = background;
   context.fill();
 
-  context.lineWidth = 2;
-
-  const border =
-    context.createLinearGradient(
-      0,
-      0,
-      width,
-      0
-    );
-
-  border.addColorStop(
-    0,
-    'rgba(255, 126, 201, 0.12)'
-  );
-
-  border.addColorStop(
-    0.5,
-    'rgba(255, 175, 226, 0.48)'
-  );
-
-  border.addColorStop(
-    1,
-    'rgba(175, 111, 255, 0.12)'
-  );
-
-  context.strokeStyle =
-    border;
-
+  // 3. Аккуратная неоновая рамка (сохраняет магическую атмосферу)
+  context.lineWidth = 3;
+  const border = context.createLinearGradient(0, 0, width, 0);
+  border.addColorStop(0, 'rgba(255, 110, 199, 0.25)');
+  border.addColorStop(0.5, 'rgba(255, 170, 230, 0.85)');
+  border.addColorStop(1, 'rgba(160, 100, 255, 0.25)');
+  context.strokeStyle = border;
   context.stroke();
 
-  context.font =
-    '600 43px Inter, Arial, sans-serif';
+  // 4. Текст: крупнее, четче, системный чистый шрифт
+  context.font = '700 52px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif';
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
 
-  context.textAlign =
-    'center';
+  // 5. Контрастная легкая тень вместо размывающего неона
+  context.shadowColor = 'rgba(0, 0, 0, 0.75)';
+  context.shadowBlur = 6;
+  context.shadowOffsetX = 0;
+  context.shadowOffsetY = 2;
 
-  context.textBaseline =
-    'middle';
+  // Чистый, чуть теплый белый цвет текста
+  context.fillStyle = '#ffffff';
+  context.fillText(text, cx, cy + 2, width - 140);
 
-  context.shadowColor =
-    'rgba(255, 71, 180, 0.65)';
-
-  context.shadowBlur = 18;
-
-  context.fillStyle =
-    'rgba(255, 247, 253, 0.98)';
-
-  context.fillText(
-    text,
-    cx,
-    cy + 2,
-    width - 150
-  );
-
-  const texture =
-    new THREE.CanvasTexture(
-      canvas
-    );
-
-  texture.colorSpace =
-    THREE.SRGBColorSpace;
-
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
   texture.needsUpdate = true;
 
-  const material =
-    new THREE.SpriteMaterial({
-      map: texture,
-      transparent: true,
-      opacity: 0.9,
-      depthWrite: false,
-      depthTest: false,
-      blending:
-        THREE.NormalBlending,
-    });
+  const material = new THREE.SpriteMaterial({
+    map: texture,
+    transparent: true,
+    opacity: 1.0,
+    depthWrite: false,
+    depthTest: true, // ВАЖНО: включает корректную глубину (задние фразы прячутся за передними)
+    blending: THREE.NormalBlending,
+  });
 
-  const sprite =
-    new THREE.Sprite(
-      material
-    );
-
-  sprite.scale.set(
-    7.0 * scale,
-    1.05 * scale,
-    1
-  );
-
-  sprite.userData.texture =
-    texture;
+  const sprite = new THREE.Sprite(material);
+  sprite.scale.set(7.0 * scale, 1.05 * scale, 1);
+  sprite.userData.texture = texture;
 
   return sprite;
 }
@@ -2259,66 +2172,33 @@ export default function LoveUniverse({
         );
 
         /* Phrases */
-        phraseObjects.forEach(
-          (sprite) => {
-            const data =
-              sprite.userData;
+        phraseObjects.forEach((sprite) => {
+          const data = sprite.userData;
 
-            data.angle +=
-              data.speed * 16;
+          data.angle += data.speed * 16;
 
-            sprite.position.x =
-              Math.cos(
-                data.angle
-              ) *
-              data.radius;
+          sprite.position.x = Math.cos(data.angle) * data.radius;
+          sprite.position.z = Math.sin(data.angle) * data.radius * 0.42;
+          sprite.position.y = data.y + Math.sin(time * 0.45 + data.phase) * 0.65;
 
-            sprite.position.z =
-              Math.sin(
-                data.angle
-              ) *
-              data.radius *
-              0.42;
+          const distance = Math.sqrt(
+            sprite.position.x ** 2 + sprite.position.z ** 2
+          );
 
-            sprite.position.y =
-              data.y +
-              Math.sin(
-                time * 0.45 +
-                  data.phase
-              ) *
-                0.65;
+          const scale = THREE.MathUtils.clamp(
+            1.18 - distance / 52,
+            0.76,
+            1.05
+          );
 
-            const distance =
-              Math.sqrt(
-                sprite.position.x **
-                  2 +
-                sprite.position.z **
-                  2
-              );
+          sprite.scale.set(7.0 * scale, 1.05 * scale, 1);
 
-            const scale =
-              THREE.MathUtils.clamp(
-                1.18 -
-                  distance / 52,
-                0.76,
-                1.05
-              );
-
-            sprite.scale.set(
-              7.0 * scale,
-              1.05 * scale,
-              1
-            );
-
-            sprite.material.opacity =
-              0.72 +
-              Math.sin(
-                time * 0.65 +
-                  data.phase
-              ) *
-                0.12;
-          }
-        );
+          // Плавное затухание по глубине:
+          // Ближние фразы (z > 0) имеют прозрачность 0.95 - 1.0
+          // Дальние фразы (z < 0) аккуратно угасают до 0.4, чтобы не отвлекать
+          const depthFactor = (sprite.position.z + data.radius * 0.42) / (data.radius * 0.84);
+          sprite.material.opacity = THREE.MathUtils.lerp(0.35, 0.98, depthFactor);
+        });
 
         /* Title */
         title.position.y =
